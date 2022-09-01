@@ -1,4 +1,4 @@
 # fwp-group-asm
 
 run with
->>> npm run dev
+> npm run dev
