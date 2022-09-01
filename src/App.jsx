@@ -1,14 +1,19 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import Home from "./pages/Home";
+import NotFoundPage from "./pages/NotFoundPage";
+
+import { useRoutes } from "hookrouter";
+
+const routes = {
+  "/": () => <Home />,
+  "/signup": () => <SignUp />,
+  "/signin": () => <SignIn />,
+};
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className="flex justify-center py-4">
-      <h1 className="text-3xl font-semibold">FWP Final Group Assessment</h1>
-    </div>
-  );
+  const routeResult = useRoutes(routes);
+  return routeResult || <NotFoundPage />;
 }
 
 export default App;
