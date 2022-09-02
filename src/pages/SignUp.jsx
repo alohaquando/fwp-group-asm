@@ -23,7 +23,7 @@ export default function SignUp() {
 
   return (
     // Background
-    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-screen flex">
+    <div className="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-screen pt-32">
       {/* Card */}
       <div className="w-96 space-y-8 bg-white px-8 py-10 rounded-2xl shadow-lg mx-auto my-auto">
         {/* Title */}

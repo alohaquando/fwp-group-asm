@@ -1,12 +1,12 @@
 import { A } from "hookrouter";
+import SlideOver from "../components/SlideOver";
 
 export default function Home() {
   return (
     <div className=" bg-brand-blue-gray-50 min-h-screen flex">
-      <div className="m-auto  space-y-8">
-        <h1 className="text-3xl font-semibold text-center ">Home page</h1>
-
-        <div className="flex-col flex text-center">
+      <div className="m-auto space-y-8">
+        <SlideOver />
+        {/* <div className="flex-col flex text-center">
           <h2>Some links for testing</h2>
           <A
             href="/signup"
@@ -20,7 +20,7 @@ export default function Home() {
           >
             Sign in
           </A>
-        </div>
+        </div> */}
       </div>
     </div>
   );
