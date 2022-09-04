@@ -1,9 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import {
-  faArrowAltCircleRight,
-  faPenToSquare,
-} from "@fortawesome/free-regular-svg-icons";
 
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -13,12 +9,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function UserBlock(props) {
+export default function SlideOverUserBlock(props) {
   return (
     <div className="px-4 sm:px-6 flex place-content-between place-items-center border-b-slate-100 border-b-2 py-4 ">
       {/* User Full Name */}
       <h2
-        className="text-lg font-medium text-gray-900"
+        className=" text-base font-medium text-gray-900"
         id="slide-over-title"
       >
         {props.name}
@@ -56,10 +52,6 @@ export default function UserBlock(props) {
                       "block px-4 py-2"
                     )}
                   >
-                    <FontAwesomeIcon
-                      icon={faPenToSquare}
-                      className="pr-2"
-                    />
                     Edit account
                   </A>
                 )}
@@ -73,10 +65,6 @@ export default function UserBlock(props) {
                       "block px-4 py-2"
                     )}
                   >
-                    <FontAwesomeIcon
-                      icon={faArrowAltCircleRight}
-                      className="pr-2"
-                    />
                     Sign out
                   </A>
                 )}

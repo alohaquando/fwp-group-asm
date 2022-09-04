@@ -1,5 +1,5 @@
 import Calendar from "./Calendar";
-import UserBlock from "./UserBlock";
+import UserBlock from "./SlideOverUserBlock";
 
 export default function SlideOverHeader() {
   return (
@@ -10,7 +10,7 @@ export default function SlideOverHeader() {
       {/* Calendar */}
       <div className="flex-1">
         <Calendar />
-        <div className="mx-4 border-b-slate-100 border-b-2" />
+        <div className="border-b-slate-100 border-b-2" />
       </div>
     </div>
   );
