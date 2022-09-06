@@ -12,6 +12,7 @@ export default function Calendar() {
       selected={selectedDay}
       onSelect={setSelectedDay}
       weekStartsOn={1}
+      className="transition-all"
     />
   );
 }

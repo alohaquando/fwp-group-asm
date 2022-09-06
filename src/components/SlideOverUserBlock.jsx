@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { A } from "hookrouter";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,7 +24,7 @@ export default function SlideOverUserBlock(props) {
       {/* Dropdown Menu */}
       <Menu
         as="div"
-        className="relative inline-block text-left"
+        className="relative inline-block"
       >
         <div>
           {/* Label */}
@@ -49,10 +50,14 @@ export default function SlideOverUserBlock(props) {
                     href="#"
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block px-4 py-2"
+                      "block px-4 py-2 font-semibold"
                     )}
                   >
-                    Edit account
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className="mr-3 w-4"
+                    />
+                    Account
                   </A>
                 )}
               </Menu.Item>
@@ -62,9 +67,13 @@ export default function SlideOverUserBlock(props) {
                     href="/signin"
                     className={classNames(
                       active ? "bg-gray-100 text-red-500" : "text-red-500",
-                      "block px-4 py-2"
+                      "block px-4 py-2 font-semibold"
                     )}
                   >
+                    <FontAwesomeIcon
+                      icon={faArrowCircleRight}
+                      className="mr-3 w-4"
+                    />
                     Sign out
                   </A>
                 )}

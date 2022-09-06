@@ -5,7 +5,9 @@ export default function SlideOverCardList() {
   return (
     <div className="flex-1 px-6 space-y-3">
       {/* Overdue Section */}
-      <h2 className="font-semibold text-base pt-6">Overdue</h2>
+      <h2 className="font-semibold text-base pt-6 sticky top-[480ox]">
+        Overdue
+      </h2>
       <Card
         title="This title"
         content="This is a very very long description of the content because I need to
