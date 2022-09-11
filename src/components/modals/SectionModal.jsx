@@ -11,6 +11,7 @@ export default function SectionModal({
   openState,
   onClose,
   editMode,
+  handleDelete,
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
@@ -35,10 +36,6 @@ export default function SectionModal({
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
-  };
-
-  const handleDelete = () => {
-    // code
   };
   // End Handle submission
 
@@ -106,11 +103,13 @@ export default function SectionModal({
                       <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
-                      <div className="flex flex-1 place-content-end">
-                        <DestructiveButton onClick={handleDelete}>
-                          Delete
-                        </DestructiveButton>
-                      </div>
+                      {editMode && (
+                        <div className="flex flex-1 place-content-end">
+                          <DestructiveButton onClick={handleDelete}>
+                            Delete
+                          </DestructiveButton>
+                        </div>
+                      )}
                     </div>
                     {/* End Button Group */}
                   </form>

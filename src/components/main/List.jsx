@@ -14,6 +14,7 @@ import Chip from "../chip/Chip";
 import NoteCardModal from "../modals/NoteCardModal.jsx";
 import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
 import ListModal from "../modals/ListModal";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +31,8 @@ export default function List({
 }) {
   const [modalEditListOpen, setModalEditListOpen] = useState(false);
 
+  const [modalConfirmDeleteOpen, setModalConfirmDeleteOpen] = useState(false);
+
   const [modalNewNoteCardOpen, setModalNewNoteCardOpen] = useState(false);
   const [modalNewChecklistCardOpen, setModalNewChecklistCardOpen] =
     useState(false);
@@ -45,7 +48,7 @@ export default function List({
   };
 
   const handleDelete = () => {
-    // code here
+    // code
   };
 
   const handleDone = () => {
@@ -146,7 +149,9 @@ export default function List({
                 <Menu.Item>
                   <MenuItemStyle
                     icon="faXmark"
-                    onClick={handleDelete}
+                    onClick={() =>
+                      setModalConfirmDeleteOpen(!modalConfirmDeleteOpen)
+                    }
                     destructive
                   >
                     Delete
@@ -243,6 +248,10 @@ export default function List({
         asgmtDue={due}
         asgmtDone={done}
         editMode={true}
+        handleDelete={() => {
+          setModalEditListOpen(!modalEditListOpen);
+          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+        }}
       />
 
       <NoteCardModal
@@ -254,6 +263,15 @@ export default function List({
         openState={modalNewChecklistCardOpen}
         onClose={() => setModalNewChecklistCardOpen(!modalNewChecklistCardOpen)}
       />
+
+      <ConfirmDeleteModal
+        name={title}
+        openState={modalConfirmDeleteOpen}
+        confirmDelete={handleDelete}
+        onClose={() => {
+          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+        }}
+      ></ConfirmDeleteModal>
       {/* End Modal */}
     </div>
   );

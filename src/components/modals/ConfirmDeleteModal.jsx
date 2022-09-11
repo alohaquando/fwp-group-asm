@@ -1,27 +1,28 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 import PopupStyle from "./PopupStyle";
 import SecondaryButton from "../buttons/SecondaryButton";
 import DestructiveButton from "../buttons/DestructiveButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 
-export default function ConfirmDeleteModal(props) {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
-  const firstField = useRef(null);
+export default function ConfirmDeleteModal({
+  name,
+  openState,
+  onClose,
+  confirmDelete,
+}) {
+  const [open, setOpen] = useState(openState);
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    setInput((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  // End Handle input change
+  useEffect(() => {
+    setOpen(openState);
+  }, [openState]);
 
   // Handle submission
-  const handleSubmit = (e) => {
+  const handleConfirmDelete = (e) => {
     e.preventDefault();
+    confirmDelete();
   };
   // End Handle submission
 
@@ -33,8 +34,7 @@ export default function ConfirmDeleteModal(props) {
       <Dialog
         as="div"
         className="relative z-10"
-        initialFocus={firstField}
-        onClose={setOpen}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -62,7 +62,7 @@ export default function ConfirmDeleteModal(props) {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title={"Delete " + props.name + "?"}
+                  title={"Delete " + name + "?"}
                   closeFunc={() => setOpen(false)}
                 >
                   {/* Content */}
@@ -73,17 +73,15 @@ export default function ConfirmDeleteModal(props) {
                         className="text-3xl font-extrabold text-yellow-400 w-7"
                       />
                     </div>
-                    <p className="">Deleted items cannot be restored</p>
+                    <p className="">Deleted item cannot be restored</p>
                   </div>
 
                   {/* Button group */}
                   <div className="pt-8 space-x-3 sm:flex transition">
-                    <DestructiveButton onClick={() => setOpen(false)}>
+                    <DestructiveButton onClick={handleConfirmDelete}>
                       Delete
                     </DestructiveButton>
-                    <SecondaryButton onClick={() => setOpen(false)}>
-                      Keep
-                    </SecondaryButton>
+                    <SecondaryButton onClick={onClose}>Keep</SecondaryButton>
                   </div>
                   {/* End Button Group */}
                   {/* End Content */}

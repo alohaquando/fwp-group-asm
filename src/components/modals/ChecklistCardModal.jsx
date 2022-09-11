@@ -23,6 +23,7 @@ export default function ChecklistCardModal({
   openState,
   onClose,
   editMode,
+  handleDelete,
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
@@ -70,9 +71,6 @@ export default function ChecklistCardModal({
     e.preventDefault();
   };
 
-  const handleDelete = () => {
-    // code
-  };
   // End Handle submission
 
   // Handle adding more checklist item
@@ -215,11 +213,13 @@ export default function ChecklistCardModal({
                       <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
-                      <div className="flex flex-1 place-content-end">
-                        <DestructiveButton onClick={handleDelete}>
-                          Delete
-                        </DestructiveButton>
-                      </div>
+                      {editMode && (
+                        <div className="flex flex-1 place-content-end">
+                          <DestructiveButton onClick={handleDelete}>
+                            Delete
+                          </DestructiveButton>
+                        </div>
+                      )}
                     </div>
                     {/* End Button Group */}
                   </form>

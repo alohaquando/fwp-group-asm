@@ -8,10 +8,18 @@ import { Menu, Transition } from "@headlessui/react";
 import MenuItemStyle from "../menu/MenuItemStyle";
 import ListModal from "../modals/ListModal.jsx";
 import SectionModal from "../modals/SectionModal";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 
 export default function Section({ title, ...props }) {
   const [modalEditSectionOpen, setModalEditSectionOpen] = useState(false);
+
+  const [modalConfirmDeleteOpen, setModalConfirmDeleteOpen] = useState(false);
+
   const [modalNewListOpen, setModalNewListOpen] = useState(false);
+
+  const handleDelete = () => {
+    // code
+  };
 
   return (
     <div className="w-[360px] pb-10 mx-4 scrollbar-hide overflow-auto">
@@ -55,13 +63,16 @@ export default function Section({ title, ...props }) {
                       setModalEditSectionOpen(!modalEditSectionOpen)
                     }
                   >
-                    Rename
+                    Edit
                   </MenuItemStyle>
                 </Menu.Item>
 
                 <Menu.Item>
                   <MenuItemStyle
                     icon="faXmark"
+                    onClick={() => {
+                      setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+                    }}
                     destructive
                   >
                     Delete
@@ -99,8 +110,21 @@ export default function Section({ title, ...props }) {
         crsName={title}
         openState={modalEditSectionOpen}
         onClose={() => setModalEditSectionOpen(!modalEditSectionOpen)}
+        handleDelete={() => {
+          setModalEditSectionOpen(!modalEditSectionOpen);
+          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+        }}
         editMode={true}
       />
+
+      <ConfirmDeleteModal
+        name={title}
+        openState={modalConfirmDeleteOpen}
+        confirmDelete={handleDelete}
+        onClose={() => {
+          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+        }}
+      ></ConfirmDeleteModal>
 
       <ListModal
         openState={modalNewListOpen}
