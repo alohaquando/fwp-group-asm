@@ -1,11 +1,11 @@
-import CardListSlideOut from "./SlideOverCardList";
 import SlideOverHeader from "./SlideOverHeader";
+import SlideOverCardList from "./SlideOverCardList";
 
 export default function SlideOver() {
   // NOTE: This is something
   return (
     <div
-      className="relative z-10"
+      className="relative z-10 "
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
@@ -16,7 +16,7 @@ export default function SlideOver() {
             <SlideOverHeader />
 
             {/* Cards Section*/}
-            <CardListSlideOut />
+            <SlideOverCardList />
           </div>
         </div>
       </div>

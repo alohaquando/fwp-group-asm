@@ -6,6 +6,7 @@ specifiers:
   '@fortawesome/free-solid-svg-icons': ^6.2.0
   '@fortawesome/react-fontawesome': ^0.2.0
   '@headlessui/react': ^1.6.6
+  '@tailwindcss/forms': ^0.5.3
   '@tailwindcss/line-clamp': ^0.4.1
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
@@ -23,6 +24,7 @@ specifiers:
   react-dom: ^18.2.0
   tailwind-scrollbar-hide: ^1.1.7
   tailwindcss: ^3.1.8
+  tailwindcss-labeled-groups: ^0.0.2
   vite: ^3.0.7
 
 dependencies:
@@ -31,6 +33,7 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 6.2.0
   '@fortawesome/react-fontawesome': 0.2.0_6j2wdqxompc6mcokhxkpep2gqu
   '@headlessui/react': 1.6.6_biqbaboplfbrettd7655fr4n2y
+  '@tailwindcss/forms': 0.5.3_tailwindcss@3.1.8
   '@tailwindcss/line-clamp': 0.4.1_tailwindcss@3.1.8
   autoprefixer: 10.4.8_postcss@8.4.16
   axios: 0.27.2
@@ -45,6 +48,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   tailwind-scrollbar-hide: 1.1.7
   tailwindcss: 3.1.8_postcss@8.4.16
+  tailwindcss-labeled-groups: 0.0.2_tailwindcss@3.1.8
 
 devDependencies:
   '@types/react': 18.0.17
@@ -548,6 +552,15 @@ packages:
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
+  /@tailwindcss/forms/0.5.3_tailwindcss@3.1.8:
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.1.8_postcss@8.4.16
     dev: false
 
   /@tailwindcss/line-clamp/0.4.1_tailwindcss@3.1.8:
@@ -2400,6 +2413,14 @@ packages:
 
   /tailwind-scrollbar-hide/1.1.7:
     resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
+    dev: false
+
+  /tailwindcss-labeled-groups/0.0.2_tailwindcss@3.1.8:
+    resolution: {integrity: sha512-leOVv9h2K9WDHoXPXVBOmTJgWECVkpVFc/hjrwuqGUEtNxvRvuOtCjenu9ppY+pJtky5INJUqDCNa8pS3AbYmw==}
+    peerDependencies:
+      tailwindcss: ^3.0.23
+    dependencies:
+      tailwindcss: 3.1.8_postcss@8.4.16
     dev: false
 
   /tailwindcss/3.1.8_postcss@8.4.16:
