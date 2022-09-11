@@ -4,11 +4,13 @@ import Home from "./pages/Home";
 import NotFoundPage from "./pages/NotFoundPage";
 
 import { useRoutes } from "hookrouter";
+import Test from "./pages/Test";
 
 const routes = {
   "/": () => <Home />,
   "/signup": () => <SignUp />,
   "/signin": () => <SignIn />,
+  "/test": () => <Test />,
 };
 
 function App() {

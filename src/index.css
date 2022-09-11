@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #00C7FD;
+  --rdp-background-color: #e7edff;
+  /* Outline border for focused elements */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  /* Outline border for focused and selected elements */
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.rdp-caption_label {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.rdp-head_cell {
+  font-weight: 600;
+  color: #535E71;
+}
+
+.rdp-day_today:not(.rdp-day_outside) {
+  color: var(--rdp-accent-color)
+}
+
+.rdp-day {
+  font-weight: 600;
+  margin: 0.188rem 0 0.188rem 0
+
+}
+
+.rdp-day_selected:not([disabled]),
+.rdp-day_selected:focus:not([disabled]),
+.rdp-day_selected:active:not([disabled]),
+.rdp-day_selected:hover:not([disabled]) {
+  color: white;
+  background-color: var(--rdp-accent-color);
+}
