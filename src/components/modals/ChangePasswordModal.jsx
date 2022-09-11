@@ -1,17 +1,18 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
-import DateInput from "../inputs/DateInput";
-import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import Label from "../inputs/Label";
 
-export default function EditAccount() {
-  const [open, setOpen] = useState(true);
+export default function ChangePasswordModal(props) {
+  const [open, setOpen] = useState(props.open);
   const [input, setInput] = useState({});
   const firstField = useRef(null);
+
+  useEffect(() => {
+    setOpen(props.open);
+  }, [props.open]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -25,6 +26,7 @@ export default function EditAccount() {
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.onSuccess();
   };
   // End Handle submission
 
@@ -65,8 +67,8 @@ export default function EditAccount() {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title="Edit account"
-                  closeFunc={() => setOpen(false)}
+                  title="Change password"
+                  closeFunc={props.onClose}
                 >
                   {/* Content */}
                   <form
@@ -74,32 +76,27 @@ export default function EditAccount() {
                     onSubmit={handleSubmit}
                   >
                     <TextInput
-                      label="Name"
-                      id="name"
-                      type="text"
+                      label="Current password"
+                      id="curPass"
+                      type="password"
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
                     />
                     <TextInput
-                      label="Email"
-                      id="email"
-                      type="email"
-                      ref={firstField}
+                      label="New password"
+                      id="newPass"
+                      type="password"
                       onChange={handleInputChange}
                       showLabel
                     />
-                    <div className="flex flex-col">
-                      <Label>Password</Label>
-                      <SecondaryButton onClick={() => {}}>
-                        Change password
-                      </SecondaryButton>
-                    </div>
 
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Save</PrimaryButton>
-                      <SecondaryButton onClick={() => setOpen(false)}>
+                      <PrimaryButton type="submit">
+                        Change password
+                      </PrimaryButton>
+                      <SecondaryButton onClick={props.onClose}>
                         Cancel
                       </SecondaryButton>
                     </div>

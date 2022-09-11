@@ -11,37 +11,54 @@ import { Menu, Transition } from "@headlessui/react";
 import MenuItemStyle from "../menu/MenuItemStyle";
 import Chip from "../chip/Chip";
 
-import AddNoteCard from "../modals/AddNoteCard";
-import AddChecklistCard from "../modals/AddChecklistCard";
+import NoteCardModal from "../modals/NoteCardModal.jsx";
+import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
+import ListModal from "../modals/ListModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function List(props) {
+export default function List({
+  done,
+  due,
+  overdue,
+  inSlideOver,
+  title,
+  parent,
+  ...props
+}) {
+  const [modalEditListOpen, setModalEditListOpen] = useState(false);
+
   const [modalNewNoteCardOpen, setModalNewNoteCardOpen] = useState(false);
   const [modalNewChecklistCardOpen, setModalNewChecklistCardOpen] =
     useState(false);
 
   const formatDate = () => {
-    if (props.due) {
-      if (new Date().getFullYear() == parseJSON(props.due).getFullYear()) {
-        return format(parseJSON(props.due), "dd MMM");
+    if (due) {
+      if (new Date().getFullYear() === parseJSON(due).getFullYear()) {
+        return format(parseJSON(due), "dd MMM");
       } else {
-        return format(parseJSON(props.due), "dd MMM yyyy");
+        return format(parseJSON(due), "dd MMM yyyy");
       }
-    } else {
-      return;
     }
+  };
+
+  const handleDelete = () => {
+    // code here
+  };
+
+  const handleDone = () => {
+    // code
   };
 
   return (
     <div
       className={classNames(
-        props.done
+        done
           ? "border border-brand-blue-gray-100 text-slate-400 shadow-none"
           : "bg-white border border-brand-blue-gray-100 bg-opacity-60",
-        props.inSlideOver ? "shadow-sm" : "",
+        inSlideOver ? "shadow-sm" : "",
         "flex flex-col rounded-2xl space-y-4 py-5 px-6 w-full flex-1 relative"
       )}
     >
@@ -49,15 +66,15 @@ export default function List(props) {
       <div className="group-list">
         <div className="flex place-content-between space-x-8">
           {/* Title */}
-          <h3 className="text-base font-semibold">{props.title}</h3>
+          <h3 className="text-base font-semibold">{title}</h3>
 
           {/* Due Date or Done chip */}
 
           {/* Due Date */}
-          {!props.done && (
+          {!done && (
             <h3
               className={classNames(
-                props.overdue ? "text-red-500" : "text-brand-blue",
+                overdue ? "text-red-500" : "text-brand-blue",
                 "whitespace-nowrap text-base font-semibold"
               )}
             >
@@ -66,7 +83,7 @@ export default function List(props) {
           )}
 
           {/* Done chip */}
-          {props.done && <Chip />}
+          {done && <Chip />}
         </div>
         {/* End Title, Due Date or Done chip */}
 
@@ -96,32 +113,40 @@ export default function List(props) {
               <div className="py-1">
                 {/* Menu Items */}
 
-                {!props.done && (
+                {!done && (
                   <Menu.Item>
-                    <MenuItemStyle icon="faCheck">Mark as done</MenuItemStyle>
+                    <MenuItemStyle
+                      icon="faCheck"
+                      onClick={handleDone}
+                    >
+                      Mark as done
+                    </MenuItemStyle>
                   </Menu.Item>
                 )}
-                {props.done && (
+                {done && (
                   <Menu.Item>
-                    <MenuItemStyle icon="faArrowRotateLeft">
+                    <MenuItemStyle
+                      icon="faArrowRotateLeft"
+                      onClick={handleDone}
+                    >
                       Mark as undone
                     </MenuItemStyle>
                   </Menu.Item>
                 )}
 
                 <Menu.Item>
-                  <MenuItemStyle icon="faPen">Edit</MenuItemStyle>
-                </Menu.Item>
-
-                <Menu.Item>
-                  <MenuItemStyle icon="faCalendar">
-                    Change due date
+                  <MenuItemStyle
+                    icon="faPen"
+                    onClick={() => setModalEditListOpen(!modalEditListOpen)}
+                  >
+                    Edit
                   </MenuItemStyle>
                 </Menu.Item>
 
                 <Menu.Item>
                   <MenuItemStyle
                     icon="faXmark"
+                    onClick={handleDelete}
                     destructive
                   >
                     Delete
@@ -136,7 +161,7 @@ export default function List(props) {
         {/* End Menu */}
       </div>
       {/* Content */}
-      {!props.inSlideOver && !props.done && (
+      {!inSlideOver && !done && (
         <div className="space-y-4 w-full ">
           {props.children}
           {/* End Content */}
@@ -202,22 +227,31 @@ export default function List(props) {
         </div>
       )}
       {/* Parent Course Footer */}
-      {props.parent && props.inSlideOver && (
+      {parent && inSlideOver && (
         <div className="space-y-2 block pt-2">
           <div className="border-b-slate-100 border-b" />
-          <p className="text-sm text-slate-400">{props.parent}</p>
+          <p className="text-sm text-slate-400">{parent}</p>
         </div>
       )}
       {/* / Parent Course Footer */}
 
       {/* Modal */}
-      <AddNoteCard
-        open={modalNewNoteCardOpen}
+      <ListModal
+        openState={modalEditListOpen}
+        onClose={() => setModalEditListOpen(!modalEditListOpen)}
+        asgmtName={title}
+        asgmtDue={due}
+        asgmtDone={done}
+        editMode={true}
+      />
+
+      <NoteCardModal
+        openState={modalNewNoteCardOpen}
         onClose={() => setModalNewNoteCardOpen(!modalNewNoteCardOpen)}
       />
 
-      <AddChecklistCard
-        open={modalNewChecklistCardOpen}
+      <ChecklistCardModal
+        openState={modalNewChecklistCardOpen}
         onClose={() => setModalNewChecklistCardOpen(!modalNewChecklistCardOpen)}
       />
       {/* End Modal */}

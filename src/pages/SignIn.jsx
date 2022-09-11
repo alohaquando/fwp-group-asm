@@ -1,6 +1,6 @@
 import axios from "axios";
 import { TextInput, Label, Checkbox } from "flowbite-react";
-import { A } from "hookrouter";
+import { A, navigate } from "hookrouter";
 import { useState } from "react";
 
 export default function SignIn() {
@@ -21,7 +21,7 @@ export default function SignIn() {
     });
 
     // Navigate to home page for now
-    window.location.href = "/";
+    navigate("/", true);
   };
 
   return (

@@ -1,17 +1,33 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
 import DateInput from "../inputs/DateInput";
-import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import Label from "../inputs/Label";
+import Checklist from "../inputs/Checklist";
+import DestructiveButton from "../buttons/DestructiveButton";
 
-export default function ListModal(props) {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
+export default function ListModal({
+  asgmtName,
+  asgmtDue,
+  asgmtDone,
+  editMode,
+  openState,
+  onClose,
+}) {
+  const [open, setOpen] = useState(openState);
+  const [input, setInput] = useState({
+    asgmtName: asgmtName ? asgmtName : "",
+    asgmtDue: asgmtDue ? asgmtDue : "",
+    asgmtDone: !!asgmtDone,
+  });
   const firstField = useRef(null);
+
+  useEffect(() => {
+    setOpen(openState);
+  }, [openState]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -19,12 +35,24 @@ export default function ListModal(props) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    console.log(input);
+  };
+
+  const handleCheckBoxChange = () => {
+    setInput((prev) => ({
+      ...prev,
+      asgmtDone: !input.asgmtDone,
+    }));
+    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+  const handleDelete = () => {
+    // code
   };
   // End Handle submission
 
@@ -37,7 +65,7 @@ export default function ListModal(props) {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={setOpen}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -66,9 +94,11 @@ export default function ListModal(props) {
                 {/* Modal title and style */}
                 <PopupStyle
                   title={
-                    props.editMode ? "Edit " + props.asgmtName : "Add assignment"
+                    editMode
+                      ? 'Edit assignment "' + asgmtName + '"'
+                      : "Add assignment"
                   }
-                  closeFunc={() => setOpen(false)}
+                  closeFunc={onClose}
                 >
                   {/* Content */}
                   <form
@@ -79,27 +109,47 @@ export default function ListModal(props) {
                       label="Assignment name"
                       id="asgmtName"
                       type="text"
-                      defaultValue={props.editMode ? props.asgmtName : ""}
+                      value={editMode ? input.asgmtName : ""}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
                     />
+
                     <DateInput
                       label="Due date"
                       id="asgmtDue"
                       type="date"
                       onChange={handleInputChange}
-                      defaultValue={props.editMode ? props.asgmtDue : ""}
+                      value={editMode ? input.asgmtDue : ""}
                       showLabel
                     />
+
+                    {editMode && (
+                      <div className="space-y-1">
+                        <Label>Status</Label>
+                        <Checklist
+                          id="asgmtDone"
+                          defaultChecked={input.asgmtDone}
+                          onChange={handleCheckBoxChange}
+                        >
+                          Done
+                        </Checklist>
+                      </div>
+                    )}
+
                     {/* Button group */}
-                    <div className="pt-8 space-x-3 sm:flex transition">
+                    <div className="pt-8 transition space-x-3 sm:flex">
                       <PrimaryButton type="submit">
-                        {props.editMode ? "Save" : "Add"}
+                        {editMode ? "Save" : "Add"}
                       </PrimaryButton>
-                      <SecondaryButton onClick={() => setOpen(false)}>
+                      <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
+                      <div className="flex flex-1 place-content-end">
+                        <DestructiveButton onClick={handleDelete}>
+                          Delete
+                        </DestructiveButton>
+                      </div>
                     </div>
                     {/* End Button Group */}
                   </form>

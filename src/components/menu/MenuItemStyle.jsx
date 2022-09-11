@@ -17,22 +17,23 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const MenuItemStyle = forwardRef((props, ref) => {
-  return (
-    <button
-      ref={ref}
-      href={props.href ? props.href : "#"}
-      onClick={props.onClick}
-      className={classNames(
-        props.destructive ? "text-red-500" : "text-slate-900",
-        "block px-4 py-2 font-semibold w-full  text-left hover:bg-gray-100 active:bg-slate-200"
-      )}
-    >
-      <MenuIcon icon={props.icon} />
-      {props.children}
-    </button>
-  );
-});
+const MenuItemStyle = forwardRef(
+  ({ onClick, destructive, icon, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className={classNames(
+          destructive ? "text-red-500" : "text-slate-900",
+          "block px-4 py-2 font-semibold w-full  text-left hover:bg-gray-100 active:bg-slate-200"
+        )}
+      >
+        <MenuIcon icon={icon} />
+        {props.children}
+      </button>
+    );
+  }
+);
 
 export default MenuItemStyle;
 

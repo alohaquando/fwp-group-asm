@@ -12,16 +12,40 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import Label from "../inputs/Label";
 import ChecklistField from "../inputs/ChecklistField";
+import Checklist from "../inputs/Checklist.jsx";
+import DestructiveButton from "../buttons/DestructiveButton";
 
-export default function AddChecklistCard(props) {
-  const [open, setOpen] = useState(props.open);
-  const [input, setInput] = useState({});
-  const [checklistItemCount, setChecklistItemCount] = useState(1);
+export default function ChecklistCardModal({
+  cardTitle,
+  cardDue,
+  cardDone,
+  cardContent,
+  openState,
+  onClose,
+  editMode,
+}) {
+  const [open, setOpen] = useState(openState);
+  const [input, setInput] = useState({
+    cardTitle: cardTitle,
+    cardDue: cardDue,
+    cardDone: !!cardDone,
+  });
+  const [checklistItemCount, setchecklistItemCount] = useState(
+    cardContent ? cardContent.length : 1
+  );
   const firstField = useRef(null);
 
   useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
+    setOpen(openState);
+    if (typeof cardContent === "object") {
+      cardContent.forEach((item, i) => {
+        setInput((prev) => ({
+          ...prev,
+          ["checklistItem_" + (i + 1)]: item.props.children,
+        }));
+      });
+    }
+  }, [openState]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -29,6 +53,15 @@ export default function AddChecklistCard(props) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    console.log(input);
+  };
+
+  const handleCheckBoxChange = () => {
+    setInput((prev) => ({
+      ...prev,
+      cardDone: !input.cardDone,
+    }));
+    console.log(input);
   };
   // End Handle input change
 
@@ -36,19 +69,23 @@ export default function AddChecklistCard(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  const handleDelete = () => {
+    // code
+  };
   // End Handle submission
 
   // Handle adding more checklist item
   const handleAddChecklistItem = (e) => {
     e.preventDefault();
-    setChecklistItemCount(checklistItemCount + 1);
+    setchecklistItemCount(checklistItemCount + 1);
   };
   // End Handle adding more checklist item
 
   // Handle removing checklist item
   const handleRemoveChecklistItem = (e) => {
     e.preventDefault();
-    setChecklistItemCount(checklistItemCount - 1);
+    setchecklistItemCount(checklistItemCount - 1);
     delete input["checklistItem_" + checklistItemCount];
   };
   // End Handle removing checklist item
@@ -62,7 +99,7 @@ export default function AddChecklistCard(props) {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={props.onClose}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -90,8 +127,12 @@ export default function AddChecklistCard(props) {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title="Add checklist card"
-                  closeFunc={props.onClose}
+                  title={
+                    editMode
+                      ? 'Edit note card "' + cardTitle + '"'
+                      : "Add note card"
+                  }
+                  closeFunc={onClose}
                 >
                   {/* Content */}
                   <form
@@ -99,18 +140,35 @@ export default function AddChecklistCard(props) {
                     onSubmit={handleSubmit}
                   >
                     <TextInput
-                      label="Card name"
-                      id="name"
+                      label="Card title"
+                      id="cardTitle"
+                      type="text"
+                      value={input.cardTitle}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
                     />
+
                     <DateInput
                       label="Due date"
-                      id="due"
+                      id="cardDue"
+                      value={input.cardDue}
                       onChange={handleInputChange}
                       showLabel
                     />
+
+                    {editMode && (
+                      <div className="space-y-1">
+                        <Label>Status</Label>
+                        <Checklist
+                          id="cardDone"
+                          defaultChecked={input.cardDone}
+                          onChange={handleCheckBoxChange}
+                        >
+                          Done
+                        </Checklist>
+                      </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label>Checklist</Label>
@@ -118,6 +176,7 @@ export default function AddChecklistCard(props) {
                       {[...Array(checklistItemCount)].map((_, i) => (
                         <ChecklistField
                           id={"checklistItem_" + (i + 1)}
+                          value={input["checklistItem_" + (i + 1)]}
                           key={i + 1}
                           onChange={handleInputChange}
                         />
@@ -153,9 +212,14 @@ export default function AddChecklistCard(props) {
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
                       <PrimaryButton type="submit">Add</PrimaryButton>
-                      <SecondaryButton onClick={props.onClose}>
+                      <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
+                      <div className="flex flex-1 place-content-end">
+                        <DestructiveButton onClick={handleDelete}>
+                          Delete
+                        </DestructiveButton>
+                      </div>
                     </div>
                     {/* End Button Group */}
                   </form>

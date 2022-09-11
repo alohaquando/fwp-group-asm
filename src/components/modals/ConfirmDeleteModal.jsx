@@ -1,21 +1,14 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import TextInput from "../inputs/TextInput";
-import DateInput from "../inputs/DateInput";
-import TextArea from "../inputs/TextArea";
-import PopupStyle from "./PopupStyle";
-import PrimaryButton from "../buttons/PrimaryButton";
-import SecondaryButton from "../buttons/SecondaryButton";
-import { useEffect } from "react";
 
-export default function AddNoteCard(props) {
-  const [open, setOpen] = useState(props.open);
+import PopupStyle from "./PopupStyle";
+import SecondaryButton from "../buttons/SecondaryButton";
+import DestructiveButton from "../buttons/DestructiveButton";
+
+export default function ConfirmDeleteModal(props) {
+  const [open, setOpen] = useState(true);
   const [input, setInput] = useState({});
   const firstField = useRef(null);
-
-  useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -41,7 +34,7 @@ export default function AddNoteCard(props) {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={props.onClose}
+        onClose={setOpen}
       >
         <Transition.Child
           as={Fragment}
@@ -69,44 +62,30 @@ export default function AddNoteCard(props) {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title="Add note card"
-                  closeFunc={props.onClose}
+                  title={"Delete " + props.name + "?"}
+                  closeFunc={() => setOpen(false)}
                 >
                   {/* Content */}
-                  <form
-                    className="space-y-2"
-                    onSubmit={handleSubmit}
-                  >
-                    <TextInput
-                      label="Card name"
-                      id="name"
-                      type="text"
-                      ref={firstField}
-                      onChange={handleInputChange}
-                      showLabel
-                    />
-                    <DateInput
-                      label="Due date"
-                      id="due"
-                      onChange={handleInputChange}
-                      showLabel
-                    />
-                    <TextArea
-                      label="Note"
-                      id="note"
-                      onChange={handleInputChange}
-                      showLabel
-                    />
-
-                    {/* Button group */}
-                    <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Add</PrimaryButton>
-                      <SecondaryButton onClick={props.onClose}>
-                        Cancel
-                      </SecondaryButton>
+                  <div className="flex flex-col mb-8 mt-12 space-y-2 justify-center align-middle">
+                    <div className="rounded-full bg-yellow-100 bg-opacity-80 w-fit flex m-auto p-3">
+                      <FontAwesomeIcon
+                        icon={faExclamation}
+                        className="text-3xl font-extrabold text-yellow-400 w-7"
+                      />
                     </div>
-                    {/* End Button Group */}
-                  </form>
+                    <p className="">Deleted items cannot be restored</p>
+                  </div>
+
+                  {/* Button group */}
+                  <div className="pt-8 space-x-3 sm:flex transition">
+                    <DestructiveButton onClick={() => setOpen(false)}>
+                      Delete
+                    </DestructiveButton>
+                    <SecondaryButton onClick={() => setOpen(false)}>
+                      Keep
+                    </SecondaryButton>
+                  </div>
+                  {/* End Button Group */}
                   {/* End Content */}
                 </PopupStyle>
               </Dialog.Panel>

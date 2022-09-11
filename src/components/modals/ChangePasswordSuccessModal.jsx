@@ -1,34 +1,16 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import TextInput from "../inputs/TextInput";
-import DateInput from "../inputs/DateInput";
-import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
-import SecondaryButton from "../buttons/SecondaryButton";
-import Label from "../inputs/Label";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-export default function ChangePasswordSuccess() {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
-  const firstField = useRef(null);
+export default function ChangePasswordSuccessModal(props) {
+  const [open, setOpen] = useState(props.open);
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    setInput((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  // End Handle input change
-
-  // Handle submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-  // End Handle submission
+  useEffect(() => {
+    setOpen(props.open);
+  }, [props.open]);
 
   return (
     <Transition.Root
@@ -38,7 +20,6 @@ export default function ChangePasswordSuccess() {
       <Dialog
         as="div"
         className="relative z-10"
-        initialFocus={firstField}
         onClose={setOpen}
       >
         <Transition.Child
@@ -68,7 +49,7 @@ export default function ChangePasswordSuccess() {
                 {/* Modal title and style */}
                 <PopupStyle
                   title="Change password"
-                  closeFunc={() => setOpen(false)}
+                  closeFunc={props.onClose}
                 >
                   {/* Content */}
                   <div className="flex flex-col mb-8 mt-12 space-y-2 justify-center align-middle">
@@ -85,7 +66,7 @@ export default function ChangePasswordSuccess() {
 
                   {/* Button group */}
                   <div className="pt-8 space-x-3 sm:flex transition">
-                    <PrimaryButton onClick={() => setOpen(false)}>
+                    <PrimaryButton onClick={props.onClose}>
                       Back to planner
                     </PrimaryButton>
                   </div>

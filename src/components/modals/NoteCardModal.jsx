@@ -1,14 +1,37 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
+import DateInput from "../inputs/DateInput";
+import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
+import { useEffect } from "react";
+import Label from "../inputs/Label.jsx";
+import Checklist from "../inputs/Checklist.jsx";
+import DestructiveButton from "../buttons/DestructiveButton.jsx";
 
-export default function ChangePassword() {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
+export default function NoteCardModal({
+  cardTitle,
+  cardDue,
+  cardDone,
+  cardContent,
+  openState,
+  onClose,
+  editMode,
+}) {
+  const [open, setOpen] = useState(openState);
+  const [input, setInput] = useState({
+    cardTitle: cardTitle,
+    cardDue: cardDue,
+    cardDone: !!cardDone,
+    cardContent: cardContent,
+  });
   const firstField = useRef(null);
+
+  useEffect(() => {
+    setOpen(openState);
+  }, [openState]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -16,12 +39,25 @@ export default function ChangePassword() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    console.log(input);
+  };
+
+  const handleCheckBoxChange = () => {
+    setInput((prev) => ({
+      ...prev,
+      cardDone: !input.cardDone,
+    }));
+    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const handleDelete = () => {
+    // code
   };
   // End Handle submission
 
@@ -34,7 +70,7 @@ export default function ChangePassword() {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={setOpen}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -62,8 +98,12 @@ export default function ChangePassword() {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title="Change password"
-                  closeFunc={() => setOpen(false)}
+                  title={
+                    editMode
+                      ? 'Edit note card "' + cardTitle + '"'
+                      : "Add note card"
+                  }
+                  closeFunc={onClose}
                 >
                   {/* Content */}
                   <form
@@ -71,27 +111,55 @@ export default function ChangePassword() {
                     onSubmit={handleSubmit}
                   >
                     <TextInput
-                      label="Current password"
-                      id="curPass"
-                      type="password"
+                      label="Card title"
+                      id="cardTitle"
+                      type="text"
+                      value={input.cardTitle}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
                     />
-                    <TextInput
-                      label="New password"
-                      id="newPass"
-                      type="password"
+
+                    <DateInput
+                      label="Due date"
+                      id="cardDue"
+                      value={input.cardDue}
+                      onChange={handleInputChange}
+                      showLabel
+                    />
+
+                    {editMode && (
+                      <div className="space-y-1">
+                        <Label>Status</Label>
+                        <Checklist
+                          id="cardDone"
+                          defaultChecked={input.cardDone}
+                          onChange={handleCheckBoxChange}
+                        >
+                          Done
+                        </Checklist>
+                      </div>
+                    )}
+
+                    <TextArea
+                      label="Note"
+                      id="cardContent"
+                      value={input.cardContent}
                       onChange={handleInputChange}
                       showLabel
                     />
 
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Save</PrimaryButton>
-                      <SecondaryButton onClick={() => setOpen(false)}>
+                      <PrimaryButton type="submit">Add</PrimaryButton>
+                      <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
+                      <div className="flex flex-1 place-content-end">
+                        <DestructiveButton onClick={handleDelete}>
+                          Delete
+                        </DestructiveButton>
+                      </div>
                     </div>
                     {/* End Button Group */}
                   </form>

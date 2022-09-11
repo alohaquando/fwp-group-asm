@@ -6,6 +6,7 @@ specifiers:
   '@fortawesome/free-solid-svg-icons': ^6.2.0
   '@fortawesome/react-fontawesome': ^0.2.0
   '@headlessui/react': ^1.6.6
+  '@react-buddy/ide-toolbox': ^2.2.1
   '@tailwindcss/forms': ^0.5.3
   '@tailwindcss/line-clamp': ^0.4.1
   '@types/react': ^18.0.17
@@ -33,6 +34,7 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 6.2.0
   '@fortawesome/react-fontawesome': 0.2.0_6j2wdqxompc6mcokhxkpep2gqu
   '@headlessui/react': 1.6.6_biqbaboplfbrettd7655fr4n2y
+  '@react-buddy/ide-toolbox': 2.2.1_react@18.2.0
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.1.8
   '@tailwindcss/line-clamp': 0.4.1_tailwindcss@3.1.8
   autoprefixer: 10.4.8_postcss@8.4.16
@@ -552,6 +554,14 @@ packages:
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+    dev: false
+
+  /@react-buddy/ide-toolbox/2.2.1_react@18.2.0:
+    resolution: {integrity: sha512-oQWiiY0MJKeeHjW0wm6mO4ebarUdAW5z2g2p3gY5lF4ybDqm6CSU0oA9A6VFqGHLyG93w9W6rvRt/Ajd5cNNAQ==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@tailwindcss/forms/0.5.3_tailwindcss@3.1.8:

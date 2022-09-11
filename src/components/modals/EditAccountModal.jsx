@@ -1,14 +1,22 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-
+import TextInput from "../inputs/TextInput";
 import PopupStyle from "./PopupStyle";
+import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import DestructiveButton from "../buttons/DestructiveButton";
+import Label from "../inputs/Label";
 
-export default function ConfirmDelete(props) {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
+export default function EditAccountModal(props) {
+  const [open, setOpen] = useState(props.open);
+  const [input, setInput] = useState({
+    fullName: props.userFullName,
+    username: props.username,
+  });
   const firstField = useRef(null);
+
+  useEffect(() => {
+    setOpen(props.open);
+  }, [props.open]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -62,30 +70,47 @@ export default function ConfirmDelete(props) {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title={"Delete " + props.name + "?"}
-                  closeFunc={() => setOpen(false)}
+                  title="Edit account"
+                  closeFunc={props.onClose}
                 >
                   {/* Content */}
-                  <div className="flex flex-col mb-8 mt-12 space-y-2 justify-center align-middle">
-                    <div className="rounded-full bg-yellow-100 bg-opacity-80 w-fit flex m-auto p-3">
-                      <FontAwesomeIcon
-                        icon={faExclamation}
-                        className="text-3xl font-extrabold text-yellow-400 w-7"
-                      />
+                  <form
+                    className="space-y-2"
+                    onSubmit={handleSubmit}
+                  >
+                    <TextInput
+                      label="Name"
+                      id="fullName"
+                      type="text"
+                      ref={firstField}
+                      onChange={handleInputChange}
+                      value={input.fullName}
+                      showLabel
+                    />
+                    <TextInput
+                      label="Username"
+                      id="username"
+                      type="text"
+                      onChange={handleInputChange}
+                      value={input.username}
+                      showLabel
+                    />
+                    <div className="flex flex-col">
+                      <Label>Password</Label>
+                      <SecondaryButton onClick={props.openChangePassword}>
+                        Change password
+                      </SecondaryButton>
                     </div>
-                    <p className="">Deleted items cannot be restored</p>
-                  </div>
 
-                  {/* Button group */}
-                  <div className="pt-8 space-x-3 sm:flex transition">
-                    <DestructiveButton onClick={() => setOpen(false)}>
-                      Delete
-                    </DestructiveButton>
-                    <SecondaryButton onClick={() => setOpen(false)}>
-                      Keep
-                    </SecondaryButton>
-                  </div>
-                  {/* End Button Group */}
+                    {/* Button group */}
+                    <div className="pt-8 transition space-x-3 sm:flex">
+                      <PrimaryButton type="submit">Save</PrimaryButton>
+                      <SecondaryButton onClick={props.onClose}>
+                        Cancel
+                      </SecondaryButton>
+                    </div>
+                    {/* End Button Group */}
+                  </form>
                   {/* End Content */}
                 </PopupStyle>
               </Dialog.Panel>

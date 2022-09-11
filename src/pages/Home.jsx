@@ -3,7 +3,7 @@ import SlideOver from "../components/slideOver/SlideOver";
 
 export default function Home() {
   return (
-    <div className="bg-brand-blue-gray-50 min-h-screen min-w-content">
+    <div className="min-h-screen bg-brand-blue-gray-50 min-w-content">
       {/* Main board */}
       <Board />
 

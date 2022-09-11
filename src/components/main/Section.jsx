@@ -2,26 +2,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
-import List from "./List";
 import MenuItemStyle from "../menu/MenuItemStyle";
+import ListModal from "../modals/ListModal.jsx";
+import SectionModal from "../modals/SectionModal";
 
-export default function Section(props) {
+export default function Section({ title, ...props }) {
+  const [modalEditSectionOpen, setModalEditSectionOpen] = useState(false);
+  const [modalNewListOpen, setModalNewListOpen] = useState(false);
+
   return (
     <div className="w-[360px] pb-10 mx-4 scrollbar-hide overflow-auto">
-      <div className="group-section sticky top-0 z-20">
+      <div className="sticky top-0 z-20 group-section">
         {/* Title  */}
-        <h2 className="bg-brand-blue-gray-50 text-xl font-semibold pb-4 ">
-          {props.title}
+        <h2 className="pb-4 text-xl font-semibold bg-brand-blue-gray-50">
+          {title}
         </h2>
         {/* End Total */}
 
         {/* Menu */}
         <Menu
           as="div"
-          className="group-section-hover:opacity-100 right-4 top-0 z-30 absolute opacity-0 transition"
+          className="absolute top-0 right-4 z-30 opacity-0 group-section-hover:opacity-100 transition"
         >
           <div>
             {/* Menu Button */}
@@ -45,7 +49,14 @@ export default function Section(props) {
                 {/* Menu Items */}
 
                 <Menu.Item>
-                  <MenuItemStyle icon="faPen">Rename</MenuItemStyle>
+                  <MenuItemStyle
+                    icon="faPen"
+                    onClick={() =>
+                      setModalEditSectionOpen(!modalEditSectionOpen)
+                    }
+                  >
+                    Rename
+                  </MenuItemStyle>
                 </Menu.Item>
 
                 <Menu.Item>
@@ -64,13 +75,16 @@ export default function Section(props) {
         {/* End Menu */}
       </div>
 
-      <div className="space-y-3 flex-col flex">
+      <div className="flex flex-col space-y-3">
         {/* Content */}
         {props.children}
         {/* End Content */}
 
         {/* Add button */}
-        <button className="relative rounded-xl py-2.5 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 hover:py-4 w-full text-left transition-all text-sm font-semibold">
+        <button
+          onClick={() => setModalNewListOpen(!modalNewListOpen)}
+          className="relative rounded-xl py-2.5 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 hover:py-4 w-full text-left transition-all text-sm font-semibold"
+        >
           <FontAwesomeIcon
             icon={faPlus}
             className="mr-3"
@@ -79,6 +93,21 @@ export default function Section(props) {
         </button>
         {/* End Add button */}
       </div>
+
+      {/*Modal*/}
+      <SectionModal
+        crsName={title}
+        openState={modalEditSectionOpen}
+        onClose={() => setModalEditSectionOpen(!modalEditSectionOpen)}
+        editMode={true}
+      />
+
+      <ListModal
+        openState={modalNewListOpen}
+        onClose={() => setModalNewListOpen(!modalNewListOpen)}
+        editMode={false}
+      />
+      {/*End Modal*/}
     </div>
   );
 }

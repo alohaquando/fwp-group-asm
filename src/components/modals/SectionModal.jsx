@@ -1,17 +1,26 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
-import DateInput from "../inputs/DateInput";
-import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import Label from "../inputs/Label";
+import DestructiveButton from "../buttons/DestructiveButton";
 
-export default function SectionModal(props) {
-  const [open, setOpen] = useState(true);
-  const [input, setInput] = useState({});
+export default function SectionModal({
+  crsName,
+  openState,
+  onClose,
+  editMode,
+}) {
+  const [open, setOpen] = useState(openState);
+  const [input, setInput] = useState({
+    crsName: crsName ? crsName : "",
+  });
   const firstField = useRef(null);
+
+  useEffect(() => {
+    setOpen(openState);
+  }, [openState]);
 
   // Handle input change
   const handleInputChange = (e) => {
@@ -19,12 +28,17 @@ export default function SectionModal(props) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const handleDelete = () => {
+    // code
   };
   // End Handle submission
 
@@ -37,7 +51,7 @@ export default function SectionModal(props) {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={setOpen}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -65,8 +79,10 @@ export default function SectionModal(props) {
               <Dialog.Panel>
                 {/* Modal title and style */}
                 <PopupStyle
-                  title={props.editMode ? "Edit " + props.crName : "Add course"}
-                  closeFunc={() => setOpen(false)}
+                  title={
+                    editMode ? 'Edit course "' + crsName + '"' : "Add course"
+                  }
+                  closeFunc={onClose}
                 >
                   {/* Content */}
                   <form
@@ -75,9 +91,9 @@ export default function SectionModal(props) {
                   >
                     <TextInput
                       label="Course name"
-                      id="crName"
+                      id="crsName"
                       type="text"
-                      defaultValue={props.editMode ? props.crName : ""}
+                      defaultValue={editMode ? input.crsName : ""}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
@@ -85,11 +101,16 @@ export default function SectionModal(props) {
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
                       <PrimaryButton type="submit">
-                        {props.editMode ? "Save" : "Add"}
+                        {editMode ? "Save" : "Add"}
                       </PrimaryButton>
-                      <SecondaryButton onClick={() => setOpen(false)}>
+                      <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>
+                      <div className="flex flex-1 place-content-end">
+                        <DestructiveButton onClick={handleDelete}>
+                          Delete
+                        </DestructiveButton>
+                      </div>
                     </div>
                     {/* End Button Group */}
                   </form>

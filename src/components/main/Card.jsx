@@ -3,48 +3,69 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import { format, parseJSON } from "date-fns";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 import MenuItemStyle from "../menu/MenuItemStyle";
 import Chip from "../chip/Chip";
+import NoteCardModal from "../modals/NoteCardModal.jsx";
+import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Card(props) {
+export default function Card({
+  title,
+  due,
+  done,
+  type,
+  overdue,
+  parent,
+  ...props
+}) {
+  const [modalEditNoteCardOpen, setModalEditNoteCardOpen] = useState(false);
+
+  const [modalEditChecklistCardOpen, setModalEditChecklistCardOpen] =
+    useState(false);
+
   const formatDate = () => {
-    if (props.due) {
-      if (new Date().getFullYear() == parseJSON(props.due).getFullYear()) {
-        return format(parseJSON(props.due), "dd MMM");
+    if (due) {
+      if (new Date().getFullYear() === parseJSON(due).getFullYear()) {
+        return format(parseJSON(due), "dd MMM");
       } else {
-      return format(parseJSON(props.due), "dd MMM yyyy");
+        return format(parseJSON(due), "dd MMM yyyy");
       }
-    } else {
-      return;
     }
+  };
+
+  const handleDelete = () => {
+    // code
+  };
+
+  const handleDone = () => {
+    // code
   };
 
   return (
     <div
       className={classNames(
-        props.done ? "text-slate-400" : "bg-white shadow-sm",
+        done ? "text-slate-400" : "bg-white shadow-sm",
         "p-4 rounded-xl border space-y-2 border-slate-200 w-full group-card relative"
       )}
     >
       {/* Title, Due Date or Done chip */}
       <div className="flex place-content-between space-x-6">
         {/* Title */}
-        <p>{props.title}</p>
+        <p>{title}</p>
 
         {/* Due Date or Done chip */}
 
         {/* Due Date */}
-        {!props.done && props.due && (
+        {!done && due && (
           <p
             className={classNames(
-              props.overdue ? "text-red-500" : "text-slate-500",
+              overdue ? "text-red-500" : "text-slate-500",
               "whitespace-nowrap"
             )}
           >
@@ -53,7 +74,7 @@ export default function Card(props) {
         )}
 
         {/* Done chip */}
-        {props.done && <Chip />}
+        {done && <Chip />}
         {/* End Title, Due Date or Done chip */}
 
         {/* Menu */}
@@ -82,32 +103,48 @@ export default function Card(props) {
               <div className="py-1">
                 {/* Menu Items */}
 
-                {!props.done && (
+                {!done && (
                   <Menu.Item>
-                    <MenuItemStyle icon="faCheck">Mark as done</MenuItemStyle>
+                    <MenuItemStyle
+                      icon="faCheck"
+                      onClick={handleDone}
+                    >
+                      Mark as done
+                    </MenuItemStyle>
                   </Menu.Item>
                 )}
-                {props.done && (
+                {done && (
                   <Menu.Item>
-                    <MenuItemStyle icon="faArrowRotateLeft">
+                    <MenuItemStyle
+                      icon="faArrowRotateLeft"
+                      onClick={handleDone}
+                    >
                       Mark as undone
                     </MenuItemStyle>
                   </Menu.Item>
                 )}
 
                 <Menu.Item>
-                  <MenuItemStyle icon="faPen">Edit</MenuItemStyle>
-                </Menu.Item>
-
-                <Menu.Item>
-                  <MenuItemStyle icon="faCalendar">
-                    Change due date
+                  <MenuItemStyle
+                    icon="faPen"
+                    onClick={() => {
+                      if (type === "note") {
+                        setModalEditNoteCardOpen(!modalEditNoteCardOpen);
+                      } else if (type === "checklist") {
+                        setModalEditChecklistCardOpen(
+                          !modalEditChecklistCardOpen
+                        );
+                      }
+                    }}
+                  >
+                    Edit
                   </MenuItemStyle>
                 </Menu.Item>
 
                 <Menu.Item>
                   <MenuItemStyle
                     icon="faXmark"
+                    onClick={handleDelete}
                     destructive
                   >
                     Delete
@@ -123,22 +160,46 @@ export default function Card(props) {
       </div>
 
       {/* Content */}
-      {!props.done && props.type == "note" && (
+      {!done && type === "note" && (
         <p className="text-slate-500 text-base">{props.children}</p>
       )}
-      {!props.done && props.type == "checklist" && (
+      {!done && type === "checklist" && (
         <div className="space-y-1">{props.children}</div>
       )}
       {/* End Content */}
 
       {/* Parent Course Footer */}
-      {props.parent && (
+      {parent && (
         <div className="space-y-2 block pt-2">
           <div className="border-b-slate-100 border-b" />
-          <p className="text-sm text-slate-400">{props.parent}</p>
+          <p className="text-sm text-slate-400">{parent}</p>
         </div>
       )}
       {/* / Parent Course Footer */}
+
+      {/* Modal */}
+      <NoteCardModal
+        cardTitle={title}
+        cardDue={due}
+        cardDone={done}
+        cardContent={props.children}
+        openState={modalEditNoteCardOpen}
+        onClose={() => setModalEditNoteCardOpen(!modalEditNoteCardOpen)}
+        editMode={true}
+      />
+
+      <ChecklistCardModal
+        cardTitle={title}
+        cardDue={due}
+        cardDone={done}
+        cardContent={props.children}
+        openState={modalEditChecklistCardOpen}
+        onClose={() =>
+          setModalEditChecklistCardOpen(!modalEditChecklistCardOpen)
+        }
+        editMode={true}
+      />
+      {/* End Modal */}
     </div>
   );
 }

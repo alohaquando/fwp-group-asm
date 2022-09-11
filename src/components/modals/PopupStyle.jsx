@@ -9,7 +9,7 @@ export default function ModalStyle(props) {
         <div className="mt-3 text-center flex sm:mt-0 mb-5 place-content-between">
           <Dialog.Title
             as="h3"
-            className="text-xl font-medium text-gray-900"
+            className="text-xl font-medium text-gray-900 text-left"
           >
             {props.title}
           </Dialog.Title>
