@@ -9,10 +9,10 @@ export default function NotFoundPage() {
         className="block max-w-md mx-auto"
       />
 
-      <h1 className="text-3xl font-semibold">Page not found</h1>
+      <h1 className="text-3xl font-semibold block">Page not found</h1>
 
       <A
-        className="font-semibold text-white text-xl bg-brand-blue rounded-xl shadow-sm py-4 px-6 block max-w-min whitespace-nowrap mx-auto"
+        className="font-semibold text-white text-xl bg-brand-blue rounded-xl shadow-sm py-3 px-6 block max-w-min whitespace-nowrap mx-auto"
         href="/"
       >
         Go to home
