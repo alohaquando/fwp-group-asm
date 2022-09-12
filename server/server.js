@@ -1,9 +1,8 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 //import UserData from "UserModels.js";
-
+const User = require('./Models/UserModels');
 
 
 
@@ -23,7 +22,6 @@ async function connect() {
 
 
 
-const User = require('UserModels.js');
 app.post("/register", async (req,res) => {
     const{username, password} = req.boby;
     try {
@@ -33,7 +31,7 @@ app.post("/register", async (req,res) => {
         });
         res.send({Status: "created"});
     } catch (error) {
-        res.send({status: "error"})
+        res.send({status: "error"});
     }
 });
 
