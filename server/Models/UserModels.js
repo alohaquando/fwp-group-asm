@@ -6,11 +6,11 @@ const UserSchema = new mongoose.Schema(
         password:String,
     },
     {
-        collection: "UserData",
-    }
+        collection: "User",
+    },
 );
 
 console.log("UserModels work");
 
 
-module.exports = mongoose.model("UserData", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
