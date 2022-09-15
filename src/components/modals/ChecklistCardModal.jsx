@@ -31,7 +31,7 @@ export default function ChecklistCardModal({
     cardDue: cardDue,
     cardDone: !!cardDone,
   });
-  const [checklistItemCount, setchecklistItemCount] = useState(
+  const [checklistItemCount, setChecklistItemCount] = useState(
     cardContent ? cardContent.length : 1
   );
   const firstField = useRef(null);
@@ -76,14 +76,14 @@ export default function ChecklistCardModal({
   // Handle adding more checklist item
   const handleAddChecklistItem = (e) => {
     e.preventDefault();
-    setchecklistItemCount(checklistItemCount + 1);
+    setChecklistItemCount(checklistItemCount + 1);
   };
   // End Handle adding more checklist item
 
   // Handle removing checklist item
   const handleRemoveChecklistItem = (e) => {
     e.preventDefault();
-    setchecklistItemCount(checklistItemCount - 1);
+    setChecklistItemCount(checklistItemCount - 1);
     delete input["checklistItem_" + checklistItemCount];
   };
   // End Handle removing checklist item
