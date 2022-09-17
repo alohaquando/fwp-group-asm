@@ -1,8 +1,3 @@
-import format from "date-fns/format";
-import Card from "../main/Card";
-import List from "../main/List";
-import SlideOverCardListBlock from "./SlideOverCardListBlock";
-
 export default function SlideOverCardListSection(props) {
   return (
     <div className="flex-1 px-6 space-y-3">

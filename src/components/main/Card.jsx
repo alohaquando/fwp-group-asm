@@ -11,18 +11,22 @@ import Chip from "../chip/Chip";
 import NoteCardModal from "../modals/NoteCardModal.jsx";
 import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Card({
+  _id,
   title,
   due,
   done,
   type,
   overdue,
-  parent,
+  parent_name,
+  parent_id,
   ...props
 }) {
   const [modalEditNoteCardOpen, setModalEditNoteCardOpen] = useState(false);
@@ -31,6 +35,8 @@ export default function Card({
     useState(false);
 
   const [modalConfirmDeleteOpen, setModalConfirmDeleteOpen] = useState(false);
+
+  const data = useData();
 
   const formatDate = () => {
     if (due) {
@@ -43,11 +49,30 @@ export default function Card({
   };
 
   const handleDelete = () => {
-    // code
+    axios
+      .delete(`http://localhost:3000/api/cards/${parent_id}/${_id}`)
+      .then(() => {
+        data.load();
+        setModalConfirmDeleteOpen(false);
+      });
   };
 
   const handleDone = () => {
-    // code
+    axios
+      .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}/done`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
+  };
+
+  const handleUnDone = () => {
+    axios
+      .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}/undone`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
   };
 
   return (
@@ -120,7 +145,7 @@ export default function Card({
                   <Menu.Item>
                     <MenuItemStyle
                       icon="faArrowRotateLeft"
-                      onClick={handleDone}
+                      onClick={handleUnDone}
                     >
                       Mark as undone
                     </MenuItemStyle>
@@ -174,20 +199,22 @@ export default function Card({
       {/* End Content */}
 
       {/* Parent Course Footer */}
-      {parent && (
+      {parent_name && (
         <div className="space-y-2 block pt-2">
           <div className="border-b-slate-100 border-b" />
-          <p className="text-sm text-slate-400">{parent}</p>
+          <p className="text-sm text-slate-400">{parent_name}</p>
         </div>
       )}
       {/* / Parent Course Footer */}
 
       {/* Modal */}
       <NoteCardModal
-        cardTitle={title}
-        cardDue={due}
-        cardDone={done}
-        cardContent={props.children}
+        _id={_id}
+        parent_id={parent_id}
+        title={title}
+        due={due}
+        done={done}
+        content={props.children}
         openState={modalEditNoteCardOpen}
         onClose={() => setModalEditNoteCardOpen(!modalEditNoteCardOpen)}
         editMode={true}
@@ -198,10 +225,10 @@ export default function Card({
       />
 
       <ChecklistCardModal
-        cardTitle={title}
-        cardDue={due}
-        cardDone={done}
-        cardContent={props.children}
+        title={title}
+        due={due}
+        done={done}
+        content={props.children}
         openState={modalEditChecklistCardOpen}
         onClose={() =>
           setModalEditChecklistCardOpen(!modalEditChecklistCardOpen)
