@@ -10,12 +10,16 @@ import { useEffect } from "react";
 import Label from "../inputs/Label.jsx";
 import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton.jsx";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 export default function NoteCardModal({
-  cardTitle,
-  cardDue,
-  cardDone,
-  cardContent,
+  _id,
+  parent_id,
+  title,
+  due,
+  done,
+  content,
   openState,
   onClose,
   editMode,
@@ -23,12 +27,14 @@ export default function NoteCardModal({
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
-    cardTitle: cardTitle,
-    cardDue: cardDue,
-    cardDone: !!cardDone,
-    cardContent: cardContent,
+    title: title,
+    due: due,
+    done: !!done,
+    content: content,
   });
   const firstField = useRef(null);
+
+  const data = useData();
 
   useEffect(() => {
     setOpen(openState);
@@ -40,13 +46,12 @@ export default function NoteCardModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    console.log(input);
   };
 
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      cardDone: !input.cardDone,
+      done: !input.done,
     }));
     console.log(input);
   };
@@ -55,6 +60,24 @@ export default function NoteCardModal({
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!editMode) {
+      axios
+        .post(`http://localhost:3000/api/cards/${parent_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    } else if (editMode) {
+      axios
+        .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    }
   };
   // End Handle submission
 
@@ -97,7 +120,7 @@ export default function NoteCardModal({
                 <PopupStyle
                   title={
                     editMode
-                      ? 'Edit note card "' + cardTitle + '"'
+                      ? 'Edit note card "' + title + '"'
                       : "Add note card"
                   }
                   closeFunc={onClose}
@@ -109,9 +132,9 @@ export default function NoteCardModal({
                   >
                     <TextInput
                       label="Card title"
-                      id="cardTitle"
+                      id="title"
                       type="text"
-                      value={input.cardTitle}
+                      value={input.title}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
@@ -119,8 +142,8 @@ export default function NoteCardModal({
 
                     <DateInput
                       label="Due date"
-                      id="cardDue"
-                      value={input.cardDue}
+                      id="due"
+                      value={input.due}
                       onChange={handleInputChange}
                       showLabel
                     />
@@ -129,8 +152,8 @@ export default function NoteCardModal({
                       <div className="space-y-1">
                         <Label>Status</Label>
                         <Checklist
-                          id="cardDone"
-                          defaultChecked={input.cardDone}
+                          id="done"
+                          defaultChecked={input.done}
                           onChange={handleCheckBoxChange}
                         >
                           Done
@@ -140,15 +163,17 @@ export default function NoteCardModal({
 
                     <TextArea
                       label="Note"
-                      id="cardContent"
-                      value={input.cardContent}
+                      id="content"
+                      value={input.content}
                       onChange={handleInputChange}
                       showLabel
                     />
 
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Add</PrimaryButton>
+                      <PrimaryButton type="submit">
+                        {editMode ? "Save" : "Add"}
+                      </PrimaryButton>
                       <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>

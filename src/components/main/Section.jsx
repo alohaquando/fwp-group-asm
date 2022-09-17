@@ -9,16 +9,23 @@ import MenuItemStyle from "../menu/MenuItemStyle";
 import ListModal from "../modals/ListModal.jsx";
 import SectionModal from "../modals/SectionModal";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
-export default function Section({ title, ...props }) {
+export default function Section({ _id, title, ...props }) {
   const [modalEditSectionOpen, setModalEditSectionOpen] = useState(false);
 
   const [modalConfirmDeleteOpen, setModalConfirmDeleteOpen] = useState(false);
 
   const [modalNewListOpen, setModalNewListOpen] = useState(false);
 
+  const data = useData();
+
   const handleDelete = () => {
-    // code
+    axios.delete(`http://localhost:3000/api/sections/${_id}`).then(() => {
+      data.load();
+      setModalConfirmDeleteOpen(false);
+    });
   };
 
   return (
@@ -107,13 +114,11 @@ export default function Section({ title, ...props }) {
 
       {/*Modal*/}
       <SectionModal
-        crsName={title}
+        _id={_id}
+        title={title}
         openState={modalEditSectionOpen}
         onClose={() => setModalEditSectionOpen(!modalEditSectionOpen)}
-        handleDelete={() => {
-          setModalEditSectionOpen(!modalEditSectionOpen);
-          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
-        }}
+        handleDelete={handleDelete}
         editMode={true}
       />
 
@@ -127,6 +132,7 @@ export default function Section({ title, ...props }) {
       ></ConfirmDeleteModal>
 
       <ListModal
+        parent_id={_id}
         openState={modalNewListOpen}
         onClose={() => setModalNewListOpen(!modalNewListOpen)}
         editMode={false}

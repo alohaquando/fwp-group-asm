@@ -8,11 +8,15 @@ import SecondaryButton from "../buttons/SecondaryButton";
 import Label from "../inputs/Label";
 import Checklist from "../inputs/Checklist";
 import DestructiveButton from "../buttons/DestructiveButton";
+import { useData } from "../../data/data.jsx";
+import axios from "axios";
 
 export default function ListModal({
-  asgmtName,
-  asgmtDue,
-  asgmtDone,
+  _id,
+  title,
+  due,
+  done,
+  parent_id,
   editMode,
   openState,
   onClose,
@@ -20,11 +24,14 @@ export default function ListModal({
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
-    asgmtName: asgmtName ? asgmtName : "",
-    asgmtDue: asgmtDue ? asgmtDue : "",
-    asgmtDone: !!asgmtDone,
+    title: title ? title : "",
+    due: due ? due : "",
+    done: !!done,
+    parent_id: parent_id,
   });
   const firstField = useRef(null);
+
+  const data = useData();
 
   useEffect(() => {
     setOpen(openState);
@@ -36,21 +43,36 @@ export default function ListModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    console.log(input);
   };
 
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      asgmtDone: !input.asgmtDone,
+      done: !input.done,
     }));
-    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!editMode) {
+      axios
+        .post(`http://localhost:3000/api/lists/${parent_id}`, input)
+        .then(() => {
+          data.load();
+          onClose();
+        });
+    } else if (editMode) {
+      axios
+        .patch(`http://localhost:3000/api/lists/${parent_id}/${_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    }
   };
   // End Handle submission
 
@@ -93,7 +115,7 @@ export default function ListModal({
                 <PopupStyle
                   title={
                     editMode
-                      ? 'Edit assignment "' + asgmtName + '"'
+                      ? 'Edit assignment "' + title + '"'
                       : "Add assignment"
                   }
                   closeFunc={onClose}
@@ -105,9 +127,9 @@ export default function ListModal({
                   >
                     <TextInput
                       label="Assignment name"
-                      id="asgmtName"
+                      id="title"
                       type="text"
-                      value={editMode ? input.asgmtName : ""}
+                      value={editMode ? input.title : ""}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
@@ -115,10 +137,10 @@ export default function ListModal({
 
                     <DateInput
                       label="Due date"
-                      id="asgmtDue"
+                      id="due"
                       type="date"
                       onChange={handleInputChange}
-                      value={editMode ? input.asgmtDue : ""}
+                      value={editMode ? input.due : ""}
                       showLabel
                     />
 
@@ -126,8 +148,8 @@ export default function ListModal({
                       <div className="space-y-1">
                         <Label>Status</Label>
                         <Checklist
-                          id="asgmtDone"
-                          defaultChecked={input.asgmtDone}
+                          id="done"
+                          defaultChecked={input.done}
                           onChange={handleCheckBoxChange}
                         >
                           Done

@@ -42,7 +42,7 @@ export default function EditAccountModal(props) {
         as="div"
         className="relative z-10"
         initialFocus={firstField}
-        onClose={setOpen}
+        onClose={props.onClose}
       >
         <Transition.Child
           as={Fragment}
