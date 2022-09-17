@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 //import UserData from "UserModels.js";
 const User = require('./Models/UserModels');
 const { response } = require("express");
+const {MONGO_URI} = process.env;
 
 
 
@@ -12,11 +13,11 @@ dotenv.config();
 const app= express();
 app.use(express.json())
 
-const url = "mongodb://localhost:27017"
+//const url = "mongodb://localhost:27017"
 
 async function connect() {
     try {
-        await mongoose.connect(url);
+        await mongoose.connect(MONGO_URI);
         console.log("connected to monngodb");
     } catch (error) {
         console.log(error);
@@ -44,9 +45,6 @@ app.post("/User", async (req,res) => {
     }
 });
 
-*/
-/*
-app.post("/register", (req,res) => {})
 */
 connect();
 app.listen(8000, () => {
