@@ -10,8 +10,12 @@ import { useEffect } from "react";
 import Label from "../inputs/Label.jsx";
 import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton.jsx";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 export default function NoteCardModal({
+  _id,
+  parent_id,
   title,
   due,
   done,
@@ -30,6 +34,8 @@ export default function NoteCardModal({
   });
   const firstField = useRef(null);
 
+  const data = useData();
+
   useEffect(() => {
     setOpen(openState);
   }, [openState]);
@@ -40,13 +46,12 @@ export default function NoteCardModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    console.log(input);
   };
 
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      cardDone: !input.done,
+      done: !input.done,
     }));
     console.log(input);
   };
@@ -55,6 +60,24 @@ export default function NoteCardModal({
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!editMode) {
+      axios
+        .post(`http://localhost:3000/api/cards/${parent_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    } else if (editMode) {
+      axios
+        .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    }
   };
   // End Handle submission
 
@@ -148,7 +171,9 @@ export default function NoteCardModal({
 
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Add</PrimaryButton>
+                      <PrimaryButton type="submit">
+                        {editMode ? "Save" : "Add"}
+                      </PrimaryButton>
                       <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>

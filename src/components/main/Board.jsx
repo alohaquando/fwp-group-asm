@@ -33,7 +33,7 @@ export default function Board() {
                       title={list.title}
                       due={list.due}
                       done={list.done}
-                      parent={section.name}
+                      parent_name={section.name}
                       parent_id={section._id}
                     >
                       {list.cards.map((card, i) => (
@@ -44,7 +44,7 @@ export default function Board() {
                           due={card.due}
                           done={card.done}
                           type={card.type}
-                          parent_id={section._id}
+                          parent_id={list._id}
                         >
                           {card.content}
                         </Card>

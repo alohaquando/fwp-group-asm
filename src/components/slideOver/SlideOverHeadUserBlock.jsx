@@ -88,7 +88,7 @@ export default function SlideOverHeaderUserBlock(props) {
           setModalChangePasswordOpen(!modalChangePasswordOpen);
         }}
         userFullName={props.userFullName}
-        username="jhahnsheen"
+        username="username"
       />
       <ChangePasswordModal
         open={modalChangePasswordOpen}

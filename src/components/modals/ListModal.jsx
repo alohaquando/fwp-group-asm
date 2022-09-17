@@ -58,10 +58,12 @@ export default function ListModal({
     e.preventDefault();
 
     if (!editMode) {
-      axios.post(`http://localhost:3000/api/lists`, input).then(() => {
-        data.load();
-        onClose();
-      });
+      axios
+        .post(`http://localhost:3000/api/lists/${parent_id}`, input)
+        .then(() => {
+          data.load();
+          onClose();
+        });
     } else if (editMode) {
       axios
         .patch(`http://localhost:3000/api/lists/${parent_id}/${_id}`, input)

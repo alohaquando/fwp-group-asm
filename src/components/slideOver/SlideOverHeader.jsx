@@ -5,7 +5,7 @@ export default function SlideOverHeader() {
   return (
     <div className="sticky top-0 z-20 bg-white ">
       {/* User information */}
-      <SlideOverHeaderUserBlock userFullName="Sheen Joseph Hahn" />
+      <SlideOverHeaderUserBlock userFullName="My account" />
 
       {/* Calendar */}
       <div className="flex-1 ">

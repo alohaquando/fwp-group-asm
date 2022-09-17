@@ -25,7 +25,7 @@ export default function Card({
   done,
   type,
   overdue,
-  parent,
+  parent_name,
   parent_id,
   ...props
 }) {
@@ -49,14 +49,30 @@ export default function Card({
   };
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:3000/api/cards/${_id}`).then(() => {
-      data.load();
-      setModalConfirmDeleteOpen(false);
-    });
+    axios
+      .delete(`http://localhost:3000/api/cards/${parent_id}/${_id}`)
+      .then(() => {
+        data.load();
+        setModalConfirmDeleteOpen(false);
+      });
   };
 
   const handleDone = () => {
-    // code
+    axios
+      .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}/done`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
+  };
+
+  const handleUnDone = () => {
+    axios
+      .patch(`http://localhost:3000/api/cards/${parent_id}/${_id}/undone`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
   };
 
   return (
@@ -129,7 +145,7 @@ export default function Card({
                   <Menu.Item>
                     <MenuItemStyle
                       icon="faArrowRotateLeft"
-                      onClick={handleDone}
+                      onClick={handleUnDone}
                     >
                       Mark as undone
                     </MenuItemStyle>
@@ -183,16 +199,18 @@ export default function Card({
       {/* End Content */}
 
       {/* Parent Course Footer */}
-      {parent && (
+      {parent_name && (
         <div className="space-y-2 block pt-2">
           <div className="border-b-slate-100 border-b" />
-          <p className="text-sm text-slate-400">{parent}</p>
+          <p className="text-sm text-slate-400">{parent_name}</p>
         </div>
       )}
       {/* / Parent Course Footer */}
 
       {/* Modal */}
       <NoteCardModal
+        _id={_id}
+        parent_id={parent_id}
         title={title}
         due={due}
         done={done}

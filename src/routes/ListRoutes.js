@@ -2,36 +2,33 @@
 import ListModel from "../models/ListModel.js";
 import express from "express";
 import SectionModel from "../models/SectionModel.js";
+import NoteCardModel from "../models/NoteCardModel.js";
+import CardRouter from "./CardRoutes.js";
 const ListRouter = express.Router();
 
-ListRouter.get("/", async (req, res) => {
-  try {
-    const lists = await ListModel.find();
-    res.json(lists);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+// Get all
+ListRouter.get("/", (req, res) => {
+  SectionModel.distinct("lists", {}, function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(data);
+    }
+  });
 });
 
-// Get single
 ListRouter.get("/:id", async (req, res) => {
-  try {
-    const list = await ListModel.findById(req.params.id);
-    if (list) {
-      res.status(200);
-      res.json(list);
-    } else {
-      res.status(404);
-      res.json({ error: "list not found" });
+  SectionModel.findOne({ "lists._id": req.params.id }, function (err, section) {
+    if (err) {
+      console.log(err);
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    res.send(section);
+  });
 });
 
 // Create
 // Add new list to section
-ListRouter.post("/", (req, res) => {
+ListRouter.post("/:parent_id", (req, res) => {
   const newList = new ListModel(req.body);
 
   SectionModel.findByIdAndUpdate(
@@ -47,7 +44,7 @@ ListRouter.post("/", (req, res) => {
 // Update
 ListRouter.patch("/:parent_id/:id", (req, res) => {
   SectionModel.findOneAndUpdate(
-    { _id: req.params.parent_id, "lists._id": req.params.id },
+    { "lists._id": req.params.id },
     {
       $set: {
         "lists.$.done": req.body.done,
@@ -67,7 +64,7 @@ ListRouter.patch("/:parent_id/:id", (req, res) => {
 // Set done
 ListRouter.patch("/:parent_id/:id/done", (req, res) => {
   SectionModel.findOneAndUpdate(
-    { _id: req.params.parent_id, "lists._id": req.params.id },
+    { "lists._id": req.params.id },
     { $set: { "lists.$.done": true } },
     function (err, section) {
       if (err) {
@@ -80,7 +77,7 @@ ListRouter.patch("/:parent_id/:id/done", (req, res) => {
 
 ListRouter.patch("/:parent_id/:id/undone", (req, res) => {
   SectionModel.findOneAndUpdate(
-    { _id: req.params.parent_id, "lists._id": req.params.id },
+    { "lists._id": req.params.id },
     { $set: { "lists.$.done": false } },
     function (err, section) {
       if (err) {
