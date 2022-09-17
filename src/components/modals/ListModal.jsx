@@ -8,11 +8,15 @@ import SecondaryButton from "../buttons/SecondaryButton";
 import Label from "../inputs/Label";
 import Checklist from "../inputs/Checklist";
 import DestructiveButton from "../buttons/DestructiveButton";
+import { useData } from "../../data/data.jsx";
+import axios from "axios";
 
 export default function ListModal({
+  _id,
   title,
   due,
   done,
+  parent_id,
   editMode,
   openState,
   onClose,
@@ -23,8 +27,11 @@ export default function ListModal({
     title: title ? title : "",
     due: due ? due : "",
     done: !!done,
+    parent_id: parent_id,
   });
   const firstField = useRef(null);
+
+  const data = useData();
 
   useEffect(() => {
     setOpen(openState);
@@ -36,21 +43,34 @@ export default function ListModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    console.log(input);
   };
 
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      asgmtDone: !input.done,
+      done: !input.done,
     }));
-    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!editMode) {
+      axios.post(`http://localhost:3000/api/lists`, input).then(() => {
+        data.load();
+        onClose();
+      });
+    } else if (editMode) {
+      axios
+        .patch(`http://localhost:3000/api/lists/${parent_id}/${_id}`, input)
+        .then((res) => {
+          console.log(res);
+          data.load();
+          onClose();
+        });
+    }
   };
   // End Handle submission
 

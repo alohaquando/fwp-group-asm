@@ -8,7 +8,7 @@ export const Data = ({ children }) => {
 
   const load = () => {
     axios
-      .get("http://localhost:3000/api/sections")
+      .get("http://localhost:3000/api/")
       .then((res) => setData(res.data))
       .catch((error) => console.log(error));
   };

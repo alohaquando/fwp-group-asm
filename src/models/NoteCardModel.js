@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 // TODO: Add checklist card model
 
-const NoteCardSchema = new mongoose.Schema({
+export const NoteCardSchema = new mongoose.Schema({
   title: { type: String, required: true },
   due: Date,
   done: { type: Boolean, default: false },

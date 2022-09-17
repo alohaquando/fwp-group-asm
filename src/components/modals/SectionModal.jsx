@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
 import PopupStyle from "./PopupStyle";
@@ -34,7 +34,6 @@ export default function SectionModal({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    console.log(input);
   };
   // End Handle input change
 
@@ -42,16 +41,14 @@ export default function SectionModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!editMode) {
-      axios.post("http://localhost:3000/api/sections", input).then((res) => {
-        console.log(res.data);
+      axios.post("http://localhost:3000/api/sections", input).then(() => {
         data.load();
         onClose();
       });
     } else if (editMode) {
       axios
         .patch(`http://localhost:3000/api/sections/${_id}`, input)
-        .then((res) => {
-          console.log(res.data);
+        .then(() => {
           data.load();
           onClose();
         });

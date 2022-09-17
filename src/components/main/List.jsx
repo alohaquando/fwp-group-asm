@@ -15,18 +15,22 @@ import NoteCardModal from "../modals/NoteCardModal.jsx";
 import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
 import ListModal from "../modals/ListModal";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import { useData } from "../../data/data.jsx";
+import axios from "axios";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function List({
+  _id,
   done,
   due,
   overdue,
   inSlideOver,
   title,
   parent,
+  parent_id,
   ...props
 }) {
   const [modalEditListOpen, setModalEditListOpen] = useState(false);
@@ -36,6 +40,8 @@ export default function List({
   const [modalNewNoteCardOpen, setModalNewNoteCardOpen] = useState(false);
   const [modalNewChecklistCardOpen, setModalNewChecklistCardOpen] =
     useState(false);
+
+  const data = useData();
 
   const formatDate = () => {
     if (due) {
@@ -48,11 +54,30 @@ export default function List({
   };
 
   const handleDelete = () => {
-    // code
+    axios
+      .delete(`http://localhost:3000/api/lists/${parent_id}/${_id}`)
+      .then(() => {
+        data.load();
+        setModalConfirmDeleteOpen(false);
+      });
   };
 
   const handleDone = () => {
-    // code
+    axios
+      .patch(`http://localhost:3000/api/lists/${parent_id}/${_id}/done`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
+  };
+
+  const handleUnDone = () => {
+    axios
+      .patch(`http://localhost:3000/api/lists/${parent_id}/${_id}/undone`)
+      .then((res) => {
+        console.log(res.data);
+        data.load();
+      });
   };
 
   return (
@@ -130,7 +155,7 @@ export default function List({
                   <Menu.Item>
                     <MenuItemStyle
                       icon="faArrowRotateLeft"
-                      onClick={handleDone}
+                      onClick={handleUnDone}
                     >
                       Mark as undone
                     </MenuItemStyle>
@@ -242,16 +267,15 @@ export default function List({
 
       {/* Modal */}
       <ListModal
+        _id={_id}
         openState={modalEditListOpen}
         onClose={() => setModalEditListOpen(!modalEditListOpen)}
         title={title}
         due={due}
         done={done}
+        parent_id={parent_id}
         editMode={true}
-        handleDelete={() => {
-          setModalEditListOpen(!modalEditListOpen);
-          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
-        }}
+        handleDelete={handleDelete}
       />
 
       <NoteCardModal

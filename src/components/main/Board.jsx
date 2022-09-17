@@ -20,12 +20,38 @@ export default function Board() {
           <div className="pointer-events-auto relative overscroll-none">
             <div className="flex h-full overflow-y-auto pl-4 pt-8">
               {/* Content */}
-              {data.data.map((item, i) => (
+              {data.data.map((section, i) => (
                 <Section
                   key={i}
-                  _id={item._id}
-                  title={item.title}
-                />
+                  _id={section._id}
+                  title={section.title}
+                >
+                  {section.lists.map((list, i) => (
+                    <List
+                      key={i}
+                      _id={list._id}
+                      title={list.title}
+                      due={list.due}
+                      done={list.done}
+                      parent={section.name}
+                      parent_id={section._id}
+                    >
+                      {list.cards.map((card, i) => (
+                        <Card
+                          key={i}
+                          _id={card._id}
+                          title={card.title}
+                          due={card.due}
+                          done={card.done}
+                          type={card.type}
+                          parent_id={section._id}
+                        >
+                          {card.content}
+                        </Card>
+                      ))}
+                    </List>
+                  ))}
+                </Section>
               ))}
               {/* End Content */}
 

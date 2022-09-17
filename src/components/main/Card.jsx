@@ -11,18 +11,22 @@ import Chip from "../chip/Chip";
 import NoteCardModal from "../modals/NoteCardModal.jsx";
 import ChecklistCardModal from "../modals/ChecklistCardModal.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Card({
+  _id,
   title,
   due,
   done,
   type,
   overdue,
   parent,
+  parent_id,
   ...props
 }) {
   const [modalEditNoteCardOpen, setModalEditNoteCardOpen] = useState(false);
@@ -31,6 +35,8 @@ export default function Card({
     useState(false);
 
   const [modalConfirmDeleteOpen, setModalConfirmDeleteOpen] = useState(false);
+
+  const data = useData();
 
   const formatDate = () => {
     if (due) {
@@ -43,7 +49,10 @@ export default function Card({
   };
 
   const handleDelete = () => {
-    // code
+    axios.delete(`http://localhost:3000/api/cards/${_id}`).then(() => {
+      data.load();
+      setModalConfirmDeleteOpen(false);
+    });
   };
 
   const handleDone = () => {

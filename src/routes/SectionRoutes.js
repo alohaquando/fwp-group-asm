@@ -1,6 +1,7 @@
 // Get all
 import SectionModel from "../models/SectionModel.js";
 import express from "express";
+import ListModel from "../models/ListModel.js";
 const SectionRouter = express.Router();
 
 SectionRouter.get("/", async (req, res) => {
@@ -17,13 +18,22 @@ SectionRouter.get("/:id", async (req, res) => {
   try {
     const section = await SectionModel.findById(req.params.id);
     if (section) {
-      res.status(200);
-      res.json(section);
+      res.status(200).json(section);
     } else {
-      res.status(404);
-      res.json({ error: "section not found" });
+      res.status(404).json({ error: "section does not exist!" });
     }
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+SectionRouter.get("/:id/lists", (req, res) => {
+  try {
+    SectionModel.findById(req.params.id).exec(function (err, section) {
+      res.status(200);
+      res.json(section.lists);
+    });
+  } catch {
     res.status(500).json({ error: error.message });
   }
 });

@@ -1,6 +1,7 @@
 // Get all
 import ListModel from "../models/ListModel.js";
 import express from "express";
+import SectionModel from "../models/SectionModel.js";
 const ListRouter = express.Router();
 
 ListRouter.get("/", async (req, res) => {
@@ -29,44 +30,79 @@ ListRouter.get("/:id", async (req, res) => {
 });
 
 // Create
-ListRouter.post("/", async (req, res) => {
-  const list = new ListModel(req.body);
-  try {
-    await list.save();
-    res.status(200).json(list);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+// Add new list to section
+ListRouter.post("/", (req, res) => {
+  const newList = new ListModel(req.body);
+
+  SectionModel.findByIdAndUpdate(
+    req.body.parent_id,
+    { $push: { lists: newList } },
+    { safe: true, upsert: false },
+    function (err, section) {
+      res.send(section);
+    }
+  );
 });
 
 // Update
-ListRouter.patch("/:id", async (req, res) => {
-  try {
-    const list = await ListModel.findById(req.params.id);
-    req.body.title ? (list.title = req.body.title) : {};
-    req.body.due ? (list.due = req.body.due) : {};
-    req.body.done ? (list.done = req.body.done) : {};
-    req.body.cards ? (list.cards = req.body.cards) : {};
+ListRouter.patch("/:parent_id/:id", (req, res) => {
+  SectionModel.findOneAndUpdate(
+    { _id: req.params.parent_id, "lists._id": req.params.id },
+    {
+      $set: {
+        "lists.$.done": req.body.done,
+        "lists.$.title": req.body.title,
+        "lists.$.due": req.body.due,
+      },
+    },
+    function (err, section) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      res.send(section);
+    }
+  );
+});
 
-    await list.save();
-    res.send(list);
-  } catch {
-    res.status(404).json({ error: "list does not exist!" });
-  }
+// Set done
+ListRouter.patch("/:parent_id/:id/done", (req, res) => {
+  SectionModel.findOneAndUpdate(
+    { _id: req.params.parent_id, "lists._id": req.params.id },
+    { $set: { "lists.$.done": true } },
+    function (err, section) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      res.send(section);
+    }
+  );
+});
+
+ListRouter.patch("/:parent_id/:id/undone", (req, res) => {
+  SectionModel.findOneAndUpdate(
+    { _id: req.params.parent_id, "lists._id": req.params.id },
+    { $set: { "lists.$.done": false } },
+    function (err, section) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      res.send(section);
+    }
+  );
 });
 
 // Delete
-ListRouter.delete("/:id", async (req, res) => {
-  try {
-    const list = await ListModel.findByIdAndDelete(req.params.id);
-    if (list) {
-      res.send(`list titled ${list.title} has been deleted`);
-    } else {
-      res.status(404).json({ error: "list not found!" });
+ListRouter.delete("/:parent_id/:id", (req, res) => {
+  SectionModel.findOneAndUpdate(
+    { _id: req.params.parent_id },
+    { $pull: { lists: { _id: req.params.id } } },
+    function (err, section) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      res.send(section);
     }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  );
 });
 
 export default ListRouter;

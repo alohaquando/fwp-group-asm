@@ -22,8 +22,7 @@ export default function Section({ _id, title, ...props }) {
   const data = useData();
 
   const handleDelete = () => {
-    axios.delete("http://localhost:3000/api/sections/" + _id).then((res) => {
-      console.log(res);
+    axios.delete(`http://localhost:3000/api/sections/${_id}`).then(() => {
       data.load();
       setModalConfirmDeleteOpen(false);
     });
@@ -133,6 +132,7 @@ export default function Section({ _id, title, ...props }) {
       ></ConfirmDeleteModal>
 
       <ListModal
+        parent_id={_id}
         openState={modalNewListOpen}
         onClose={() => setModalNewListOpen(!modalNewListOpen)}
         editMode={false}

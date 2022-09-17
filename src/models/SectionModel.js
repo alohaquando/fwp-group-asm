@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import Schema from "mongoose";
-
-// TODO: ObjectID reference correctly
+import ListSchema from "./ListModel.js";
+import ListModel from "./ListModel.js";
 
 const SectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  list: [{ type: Schema.Types.ObjectId }],
+  lists: [ListModel.schema],
 });
 
 export default mongoose.model("Section", SectionSchema);
