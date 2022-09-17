@@ -244,9 +244,9 @@ export default function List({
       <ListModal
         openState={modalEditListOpen}
         onClose={() => setModalEditListOpen(!modalEditListOpen)}
-        asgmtName={title}
-        asgmtDue={due}
-        asgmtDone={done}
+        title={title}
+        due={due}
+        done={done}
         editMode={true}
         handleDelete={() => {
           setModalEditListOpen(!modalEditListOpen);

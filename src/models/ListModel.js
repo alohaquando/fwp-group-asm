@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Schema from "mongoose";
 
+// TODO: ObjectID reference correctly
+
 const ListSchema = new mongoose.Schema({
   title: { type: String, required: true },
   due: Date,

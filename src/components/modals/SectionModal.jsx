@@ -1,13 +1,16 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
 import DestructiveButton from "../buttons/DestructiveButton";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 export default function SectionModal({
-  crsName,
+  _id,
+  title,
   openState,
   onClose,
   editMode,
@@ -15,9 +18,11 @@ export default function SectionModal({
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
-    crsName: crsName ? crsName : "",
+    title: title ? title : "",
   });
   const firstField = useRef(null);
+
+  const data = useData();
 
   useEffect(() => {
     setOpen(openState);
@@ -36,6 +41,21 @@ export default function SectionModal({
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!editMode) {
+      axios.post("http://localhost:3000/api/sections", input).then((res) => {
+        console.log(res.data);
+        data.load();
+        onClose();
+      });
+    } else if (editMode) {
+      axios
+        .patch(`http://localhost:3000/api/sections/${_id}`, input)
+        .then((res) => {
+          console.log(res.data);
+          data.load();
+          onClose();
+        });
+    }
   };
   // End Handle submission
 
@@ -77,7 +97,7 @@ export default function SectionModal({
                 {/* Modal title and style */}
                 <PopupStyle
                   title={
-                    editMode ? 'Edit course "' + crsName + '"' : "Add course"
+                    editMode ? 'Edit course "' + title + '"' : "Add course"
                   }
                   closeFunc={onClose}
                 >
@@ -88,9 +108,9 @@ export default function SectionModal({
                   >
                     <TextInput
                       label="Course name"
-                      id="crsName"
+                      id="title"
                       type="text"
-                      defaultValue={editMode ? input.crsName : ""}
+                      defaultValue={editMode ? input.title : ""}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel

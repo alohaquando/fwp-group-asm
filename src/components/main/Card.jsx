@@ -184,10 +184,10 @@ export default function Card({
 
       {/* Modal */}
       <NoteCardModal
-        cardTitle={title}
-        cardDue={due}
-        cardDone={done}
-        cardContent={props.children}
+        title={title}
+        due={due}
+        done={done}
+        content={props.children}
         openState={modalEditNoteCardOpen}
         onClose={() => setModalEditNoteCardOpen(!modalEditNoteCardOpen)}
         editMode={true}
@@ -198,10 +198,10 @@ export default function Card({
       />
 
       <ChecklistCardModal
-        cardTitle={title}
-        cardDue={due}
-        cardDone={done}
-        cardContent={props.children}
+        title={title}
+        due={due}
+        done={done}
+        content={props.children}
         openState={modalEditChecklistCardOpen}
         onClose={() =>
           setModalEditChecklistCardOpen(!modalEditChecklistCardOpen)

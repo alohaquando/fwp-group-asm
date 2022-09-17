@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import apiRouter from "./routes/routes.js";
 
@@ -21,6 +22,7 @@ mongoose.connection.once("connected", () => {
 
 // App and app.listen
 const server = express();
+server.use(cors());
 server.use("/api", apiRouter);
 
 server.listen(3000, () => {

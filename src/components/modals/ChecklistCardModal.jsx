@@ -15,11 +15,13 @@ import ChecklistField from "../inputs/ChecklistField";
 import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton";
 
+// TODO: Add checklist to post request
+
 export default function ChecklistCardModal({
-  cardTitle,
-  cardDue,
-  cardDone,
-  cardContent,
+  title,
+  due,
+  done,
+  content,
   openState,
   onClose,
   editMode,
@@ -27,19 +29,19 @@ export default function ChecklistCardModal({
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
-    cardTitle: cardTitle,
-    cardDue: cardDue,
-    cardDone: !!cardDone,
+    title: title,
+    due: due,
+    done: !!done,
   });
   const [checklistItemCount, setChecklistItemCount] = useState(
-    cardContent ? cardContent.length : 1
+    content ? content.length : 1
   );
   const firstField = useRef(null);
 
   useEffect(() => {
     setOpen(openState);
-    if (typeof cardContent === "object") {
-      cardContent.forEach((item, i) => {
+    if (typeof content === "object") {
+      content.forEach((item, i) => {
         setInput((prev) => ({
           ...prev,
           ["checklistItem_" + (i + 1)]: item.props.children,
@@ -60,7 +62,7 @@ export default function ChecklistCardModal({
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      cardDone: !input.cardDone,
+      done: !input.done,
     }));
     console.log(input);
   };
@@ -127,7 +129,7 @@ export default function ChecklistCardModal({
                 <PopupStyle
                   title={
                     editMode
-                      ? 'Edit note card "' + cardTitle + '"'
+                      ? 'Edit note card "' + title + '"'
                       : "Add note card"
                   }
                   closeFunc={onClose}
@@ -139,9 +141,9 @@ export default function ChecklistCardModal({
                   >
                     <TextInput
                       label="Card title"
-                      id="cardTitle"
+                      id="title"
                       type="text"
-                      value={input.cardTitle}
+                      value={input.title}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
@@ -149,8 +151,8 @@ export default function ChecklistCardModal({
 
                     <DateInput
                       label="Due date"
-                      id="cardDue"
-                      value={input.cardDue}
+                      id="due"
+                      value={input.due}
                       onChange={handleInputChange}
                       showLabel
                     />
@@ -159,8 +161,8 @@ export default function ChecklistCardModal({
                       <div className="space-y-1">
                         <Label>Status</Label>
                         <Checklist
-                          id="cardDone"
-                          defaultChecked={input.cardDone}
+                          id="done"
+                          defaultChecked={input.done}
                           onChange={handleCheckBoxChange}
                         >
                           Done

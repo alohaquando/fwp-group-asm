@@ -12,10 +12,10 @@ import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton.jsx";
 
 export default function NoteCardModal({
-  cardTitle,
-  cardDue,
-  cardDone,
-  cardContent,
+  title,
+  due,
+  done,
+  content,
   openState,
   onClose,
   editMode,
@@ -23,10 +23,10 @@ export default function NoteCardModal({
 }) {
   const [open, setOpen] = useState(openState);
   const [input, setInput] = useState({
-    cardTitle: cardTitle,
-    cardDue: cardDue,
-    cardDone: !!cardDone,
-    cardContent: cardContent,
+    title: title,
+    due: due,
+    done: !!done,
+    content: content,
   });
   const firstField = useRef(null);
 
@@ -46,7 +46,7 @@ export default function NoteCardModal({
   const handleCheckBoxChange = () => {
     setInput((prev) => ({
       ...prev,
-      cardDone: !input.cardDone,
+      cardDone: !input.done,
     }));
     console.log(input);
   };
@@ -97,7 +97,7 @@ export default function NoteCardModal({
                 <PopupStyle
                   title={
                     editMode
-                      ? 'Edit note card "' + cardTitle + '"'
+                      ? 'Edit note card "' + title + '"'
                       : "Add note card"
                   }
                   closeFunc={onClose}
@@ -109,9 +109,9 @@ export default function NoteCardModal({
                   >
                     <TextInput
                       label="Card title"
-                      id="cardTitle"
+                      id="title"
                       type="text"
-                      value={input.cardTitle}
+                      value={input.title}
                       ref={firstField}
                       onChange={handleInputChange}
                       showLabel
@@ -119,8 +119,8 @@ export default function NoteCardModal({
 
                     <DateInput
                       label="Due date"
-                      id="cardDue"
-                      value={input.cardDue}
+                      id="due"
+                      value={input.due}
                       onChange={handleInputChange}
                       showLabel
                     />
@@ -129,8 +129,8 @@ export default function NoteCardModal({
                       <div className="space-y-1">
                         <Label>Status</Label>
                         <Checklist
-                          id="cardDone"
-                          defaultChecked={input.cardDone}
+                          id="done"
+                          defaultChecked={input.done}
                           onChange={handleCheckBoxChange}
                         >
                           Done
@@ -140,8 +140,8 @@ export default function NoteCardModal({
 
                     <TextArea
                       label="Note"
-                      id="cardContent"
-                      value={input.cardContent}
+                      id="content"
+                      value={input.content}
                       onChange={handleInputChange}
                       showLabel
                     />

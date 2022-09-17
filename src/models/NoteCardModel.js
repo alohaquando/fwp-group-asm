@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import Schema from "mongoose";
+
+// TODO: Add checklist card model
 
 const NoteCardSchema = new mongoose.Schema({
   title: { type: String, required: true },
