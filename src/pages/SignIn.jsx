@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TextInput, Label, Checkbox } from "flowbite-react";
+import { Checkbox, Label, TextInput } from "flowbite-react";
 import { A, navigate } from "hookrouter";
 import { useState } from "react";
 

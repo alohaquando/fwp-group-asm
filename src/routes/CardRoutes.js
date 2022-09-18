@@ -1,15 +1,16 @@
 // Note card API
 // Get all
-import NoteCardModel from "../models/NoteCardModel.js";
+import CardModel from "../models/CardModel.js";
 import express from "express";
 import SectionModel from "../models/SectionModel.js";
+
 const CardRouter = express.Router();
 
 // Get
 
 // Create
 CardRouter.post("/:parent_id", async (req, res) => {
-  const newCard = new NoteCardModel(req.body);
+  const newCard = new CardModel(req.body);
 
   SectionModel.findOneAndUpdate(
     { "lists._id": req.params.parent_id },

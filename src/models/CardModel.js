@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-// TODO: Add checklist card model
-
-export const NoteCardSchema = new mongoose.Schema({
+export const CardSchema = new mongoose.Schema({
   title: { type: String, required: true },
   due: Date,
   done: { type: Boolean, default: false },
@@ -10,4 +8,4 @@ export const NoteCardSchema = new mongoose.Schema({
   content: { type: String, required: true },
 });
 
-export default mongoose.model("Card", NoteCardSchema);
+export default mongoose.model("Card", CardSchema);

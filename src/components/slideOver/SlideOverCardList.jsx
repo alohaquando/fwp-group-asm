@@ -1,11 +1,8 @@
 import Card from "../main/Card";
 import List from "../main/List";
-import Checklist from "../inputs/Checklist";
 import SlideOverCardListSection from "./SlideOverCardListSection";
-import SlideOverCardListBlock from "./SlideOverCardListBlock";
 import { useData } from "../../data/data.jsx";
-import Section from "../main/Section.jsx";
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function SlideOverCardList(props) {
   const data = useData();

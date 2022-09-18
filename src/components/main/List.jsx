@@ -1,11 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { format, parseJSON } from "date-fns";
 
-import { Fragment } from "react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 import MenuItemStyle from "../menu/MenuItemStyle";

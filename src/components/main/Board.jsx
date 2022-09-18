@@ -3,7 +3,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Section from "./Section";
 import List from "./List";
 import Card from "./Card";
-import Checklist from "../inputs/Checklist";
 import SectionModal from "../modals/SectionModal.jsx";
 import { useState } from "react";
 import { useData } from "../../data/data.jsx";
