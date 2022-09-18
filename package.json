@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "init-server": "nodemon src/index.js",
+    "init-server": "node src/index.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "pnpm run init-server & pnpm run dev"
+    "start": "npm run init-server & npm run dev"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -30,6 +30,7 @@
     "flowbite-react": "^0.1.10",
     "hookrouter": "^1.2.5",
     "mongoose": "^6.5.3",
+    "pnpm": "^7.11.0",
     "postcss": "^8.4.16",
     "react": "^18.2.0",
     "react-day-picker": "^8.2.0",
@@ -42,6 +43,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
+    "nodemon": "^2.0.20",
     "vite": "^3.0.7"
   }
 }
