@@ -1,5 +1,3 @@
-# fwp-group-asm
-
 To run this project:
 1. Add your database URL to ".env" file
 2. Run 'npm install'
@@ -13,7 +11,7 @@ Front-end server runs on port 5174.
 YouTube recording demo:
 https://youtu.be/2kE6wi6pJS8
 
----
+-----
 
 Work distribution
 
