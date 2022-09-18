@@ -7,6 +7,16 @@ import SectionModel from "../models/SectionModel.js";
 const CardRouter = express.Router();
 
 // Get
+CardRouter.get("/:id", async (req, res) => {
+  SectionModel.findOne({ "lists.cards._id": req.params.id })
+    .select("lists.cards -_id")
+    .exec(function (err, section) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      res.send(section);
+    });
+});
 
 // Create
 CardRouter.post("/:parent_id", async (req, res) => {
@@ -34,6 +44,7 @@ CardRouter.patch("/:parent_id/:id", async (req, res) => {
         "lists.$[lists].cards.$[cards].title": req.body.title,
         "lists.$[lists].cards.$[cards].due": req.body.due,
         "lists.$[lists].cards.$[cards].content": req.body.content,
+        "lists.$[lists].cards.$[cards].checklistItems": req.body.checklistItems,
       },
     },
     {
@@ -42,7 +53,7 @@ CardRouter.patch("/:parent_id/:id", async (req, res) => {
         { "cards._id": req.params.id },
       ],
     },
-    function (err, section) {
+    await function (err, section) {
       if (err) {
         res.status(500).json({ error: err });
       }
@@ -65,7 +76,7 @@ CardRouter.patch("/:parent_id/:id/done", async (req, res) => {
         { "cards._id": req.params.id },
       ],
     },
-    function (err, section) {
+    await function (err, section) {
       if (err) {
         res.status(500).json({ error: err });
       }
@@ -88,7 +99,7 @@ CardRouter.patch("/:parent_id/:id/undone", async (req, res) => {
         { "cards._id": req.params.id },
       ],
     },
-    function (err, section) {
+    await function (err, section) {
       if (err) {
         res.status(500).json({ error: err });
       }

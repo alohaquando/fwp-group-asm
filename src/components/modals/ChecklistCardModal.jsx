@@ -13,10 +13,14 @@ import Label from "../inputs/Label";
 import ChecklistField from "../inputs/ChecklistField";
 import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton";
+import axios from "axios";
+import { useData } from "../../data/data.jsx";
 
 // TODO: Add checklist to post request
 
 export default function ChecklistCardModal({
+  _id,
+  parent_id,
   title,
   due,
   done,
@@ -27,26 +31,31 @@ export default function ChecklistCardModal({
   handleDelete,
 }) {
   const [open, setOpen] = useState(openState);
+
   const [input, setInput] = useState({
     title: title,
     due: due,
     done: !!done,
   });
+
   const [checklistItemCount, setChecklistItemCount] = useState(
-    content ? content.length : 1
+    content ? content[1].length : 1
   );
+
   const firstField = useRef(null);
+
+  const data = useData();
 
   useEffect(() => {
     setOpen(openState);
-    if (typeof content === "object") {
-      content.forEach((item, i) => {
-        setInput((prev) => ({
-          ...prev,
-          ["checklistItem_" + (i + 1)]: item.props.children,
-        }));
-      });
-    }
+    content
+      ? content[1].forEach((item, i) => {
+          setInput((prev) => ({
+            ...prev,
+            ["checklistItem_" + (i + 1)]: item.props.children,
+          }));
+        })
+      : {};
   }, [openState]);
 
   // Handle input change
@@ -63,13 +72,44 @@ export default function ChecklistCardModal({
       ...prev,
       done: !input.done,
     }));
-    console.log(input);
   };
   // End Handle input change
 
   // Handle submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let bodyToSubmit = {
+      title: input.title,
+      due: input.due,
+      done: input.done,
+      type: "checklist",
+      checklistItems: [],
+    };
+
+    for (let i = 1; i <= checklistItemCount; i++) {
+      let checklistItemObject = {
+        title: input["checklistItem_" + i],
+      };
+      bodyToSubmit.checklistItems.push(checklistItemObject);
+    }
+
+    editMode
+      ? axios
+          .patch(
+            `http://localhost:3000/api/cards/${parent_id}/${_id}`,
+            bodyToSubmit
+          )
+          .then(() => {
+            data.load();
+            onClose();
+          })
+      : axios
+          .post(`http://localhost:3000/api/cards/${parent_id}`, bodyToSubmit)
+          .then(() => {
+            data.load();
+            onClose();
+          });
   };
 
   // End Handle submission
@@ -128,8 +168,8 @@ export default function ChecklistCardModal({
                 <PopupStyle
                   title={
                     editMode
-                      ? 'Edit note card "' + title + '"'
-                      : "Add note card"
+                      ? 'Edit checklist card "' + title + '"'
+                      : "Add checklist card"
                   }
                   closeFunc={onClose}
                 >
@@ -210,7 +250,9 @@ export default function ChecklistCardModal({
 
                     {/* Button group */}
                     <div className="pt-8 space-x-3 sm:flex transition">
-                      <PrimaryButton type="submit">Add</PrimaryButton>
+                      <PrimaryButton type="submit">
+                        {editMode ? "Save" : "Add"}
+                      </PrimaryButton>
                       <SecondaryButton onClick={onClose}>
                         Cancel
                       </SecondaryButton>

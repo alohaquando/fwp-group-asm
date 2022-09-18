@@ -1,4 +1,8 @@
-export default function Checklist({
+import { useState } from "react";
+import { useData } from "../../data/data.jsx";
+import axios from "axios";
+
+export default function ChecklistItemAxios({
   defaultChecked,
   onChange,
   _id,
@@ -7,12 +11,38 @@ export default function Checklist({
   disabled,
   ...props
 }) {
+  const data = useData();
+
+  const [checked, setChecked] = useState(defaultChecked);
+
+  const handleCheck = () => {
+    if (checked === true) {
+      axios
+        .patch(
+          `http://localhost:3000/api/checklists/${list_id}/${card_id}/${_id}/undone`
+        )
+        .then(() => {
+          setChecked(!checked);
+          data.load();
+        });
+    } else {
+      axios
+        .patch(
+          `http://localhost:3000/api/checklists/${list_id}/${card_id}/${_id}/done`
+        )
+        .then(() => {
+          setChecked(!checked);
+          data.load();
+        });
+    }
+  };
+
   return (
     <div className="flex space-x-2 place-items-start py-0.5">
       <input
         type="checkbox"
-        defaultChecked={defaultChecked}
-        onChange={onChange}
+        checked={checked}
+        onChange={handleCheck}
         id={_id}
         name={_id}
         disabled={disabled ? disabled : false}

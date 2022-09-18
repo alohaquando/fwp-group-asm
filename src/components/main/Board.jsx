@@ -6,6 +6,7 @@ import Card from "./Card";
 import SectionModal from "../modals/SectionModal.jsx";
 import { useState } from "react";
 import { useData } from "../../data/data.jsx";
+import ChecklistItemAxios from "../inputs/ChecklistItemAxios.jsx";
 
 export default function Board() {
   const [modalNewCourseOpen, setModalNewCourseOpen] = useState(false);
@@ -44,8 +45,22 @@ export default function Board() {
                           done={card.done}
                           type={card.type}
                           parent_id={list._id}
+                          // content={card.content}
+                          // checklistItems={card.checklistItems}
                         >
-                          {card.content}
+                          {card.type === "note" && card.content}
+                          {card.type === "checklist" &&
+                            card.checklistItems.map((checklistItem, i) => (
+                              <ChecklistItemAxios
+                                key={i}
+                                defaultChecked={checklistItem.done}
+                                _id={checklistItem._id}
+                                list_id={list._id}
+                                card_id={card._id}
+                              >
+                                {checklistItem.title}
+                              </ChecklistItemAxios>
+                            ))}
                         </Card>
                       ))}
                     </List>
