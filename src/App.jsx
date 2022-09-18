@@ -6,6 +6,10 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { useRoutes } from "hookrouter";
 import Test from "./pages/Test";
 
+
+// Replace DATABASE_URL with your MongoDB Database URL
+// in the .env file
+
 // Run this project
 // // npm install
 // // npm start

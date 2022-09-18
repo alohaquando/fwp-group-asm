@@ -2,8 +2,7 @@
 import ListModel from "../models/ListModel.js";
 import express from "express";
 import SectionModel from "../models/SectionModel.js";
-import NoteCardModel from "../models/NoteCardModel.js";
-import CardRouter from "./CardRoutes.js";
+
 const ListRouter = express.Router();
 
 // Get all

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
+import ChecklistModel from "./ChecklistModel.js";
 
-// TODO: Add checklist card model
-
-export const NoteCardSchema = new mongoose.Schema({
+export const CardSchema = new mongoose.Schema({
   title: { type: String, required: true },
   due: Date,
   done: { type: Boolean, default: false },
   type: { type: String, default: "note" },
   content: { type: String, required: true },
+  checklistItems: [ChecklistModel.schema],
 });
 
-export default mongoose.model("Card", NoteCardSchema);
+export default mongoose.model("Card", CardSchema);

@@ -208,37 +208,43 @@ export default function Card({
       {/* / Parent Course Footer */}
 
       {/* Modal */}
-      <NoteCardModal
-        _id={_id}
-        parent_id={parent_id}
-        title={title}
-        due={due}
-        done={done}
-        content={props.children}
-        openState={modalEditNoteCardOpen}
-        onClose={() => setModalEditNoteCardOpen(!modalEditNoteCardOpen)}
-        editMode={true}
-        handleDelete={() => {
-          setModalEditNoteCardOpen(!modalEditNoteCardOpen);
-          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
-        }}
-      />
+      {type === "note" && (
+        <NoteCardModal
+          _id={_id}
+          parent_id={parent_id}
+          title={title}
+          due={due}
+          done={done}
+          content={props.children}
+          openState={modalEditNoteCardOpen}
+          onClose={() => setModalEditNoteCardOpen(!modalEditNoteCardOpen)}
+          editMode={true}
+          handleDelete={() => {
+            setModalEditNoteCardOpen(!modalEditNoteCardOpen);
+            setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+          }}
+        />
+      )}
 
-      <ChecklistCardModal
-        title={title}
-        due={due}
-        done={done}
-        content={props.children}
-        openState={modalEditChecklistCardOpen}
-        onClose={() =>
-          setModalEditChecklistCardOpen(!modalEditChecklistCardOpen)
-        }
-        editMode={true}
-        handleDelete={() => {
-          setModalEditChecklistCardOpen(!modalEditChecklistCardOpen);
-          setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
-        }}
-      />
+      {type === "checklist" && (
+        <ChecklistCardModal
+          _id={_id}
+          parent_id={parent_id}
+          title={title}
+          due={due}
+          done={done}
+          content={props.children}
+          openState={modalEditChecklistCardOpen}
+          onClose={() =>
+            setModalEditChecklistCardOpen(!modalEditChecklistCardOpen)
+          }
+          editMode={true}
+          handleDelete={() => {
+            setModalEditChecklistCardOpen(!modalEditChecklistCardOpen);
+            setModalConfirmDeleteOpen(!modalConfirmDeleteOpen);
+          }}
+        />
+      )}
 
       <ConfirmDeleteModal
         name={title}

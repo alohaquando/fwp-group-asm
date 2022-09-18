@@ -1,7 +1,7 @@
 // Get all
 import SectionModel from "../models/SectionModel.js";
 import express from "express";
-import ListModel from "../models/ListModel.js";
+
 const SectionRouter = express.Router();
 
 SectionRouter.get("/", async (req, res) => {

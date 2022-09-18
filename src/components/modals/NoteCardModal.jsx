@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextInput from "../inputs/TextInput";
 import DateInput from "../inputs/DateInput";
@@ -6,7 +6,6 @@ import TextArea from "../inputs/TextArea";
 import PopupStyle from "./PopupStyle";
 import PrimaryButton from "../buttons/PrimaryButton";
 import SecondaryButton from "../buttons/SecondaryButton";
-import { useEffect } from "react";
 import Label from "../inputs/Label.jsx";
 import Checklist from "../inputs/Checklist.jsx";
 import DestructiveButton from "../buttons/DestructiveButton.jsx";

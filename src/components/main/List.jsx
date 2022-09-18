@@ -1,11 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { format, parseJSON } from "date-fns";
 
-import { Fragment } from "react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 import MenuItemStyle from "../menu/MenuItemStyle";
@@ -196,74 +194,74 @@ export default function List({
           {props.children}
           {/* End Content */}
 
-          <button
-            onClick={() => setModalNewNoteCardOpen(!modalNewNoteCardOpen)}
-            className="relative rounded-xl py-2 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 w-full text-left transition-all text-sm font-semibold"
-          >
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="mr-3"
-            />
-            Add card
-          </button>
-
-          {/* Add Button and Menu */}
-          {/*<Menu*/}
-          {/*  as="div"*/}
-          {/*  className="inline-block relative w-full"*/}
+          {/*<button*/}
+          {/*  onClick={() => setModalNewNoteCardOpen(!modalNewNoteCardOpen)}*/}
+          {/*  className="relative rounded-xl py-2 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 w-full text-left transition-all text-sm font-semibold"*/}
           {/*>*/}
-          {/*  <div>*/}
-          {/*    /!* Menu Button *!/*/}
-          {/*    <Menu.Button className="relative rounded-xl py-2 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 w-full text-left transition-all text-sm font-semibold">*/}
-          {/*      <FontAwesomeIcon*/}
-          {/*        icon={faPlus}*/}
-          {/*        className="mr-3"*/}
-          {/*      />*/}
-          {/*      Add card*/}
-          {/*    </Menu.Button>*/}
-          {/*    /!* End Menu Button *!/*/}
-          {/*  </div>*/}
+          {/*  <FontAwesomeIcon*/}
+          {/*    icon={faPlus}*/}
+          {/*    className="mr-3"*/}
+          {/*  />*/}
+          {/*  Add card*/}
+          {/*</button>*/}
 
-          {/*  <Transition*/}
-          {/*    as={Fragment}*/}
-          {/*    enter="transition ease-out duration-100"*/}
-          {/*    enterFrom="transform opacity-0 scale-95"*/}
-          {/*    enterTo="transform opacity-100 scale-100"*/}
-          {/*    leave="transition ease-in duration-75"*/}
-          {/*    leaveFrom="transform opacity-100 scale-100"*/}
-          {/*    leaveTo="transform opacity-0 scale-95"*/}
-          {/*  >*/}
-          {/*    <Menu.Items className="absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-white shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none">*/}
-          {/*      <div className="py-1">*/}
-          {/*        /!* Menu Items *!/*/}
+          {/*Add Button and Menu */}
+          <Menu
+            as="div"
+            className="inline-block relative w-full"
+          >
+            <div>
+              {/* Menu Button */}
+              <Menu.Button className="relative rounded-xl py-2 pl-4 text-slate-400 hover:bg-brand-blue-gray-100 w-full text-left transition-all text-sm font-semibold">
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  className="mr-3"
+                />
+                Add card
+              </Menu.Button>
+              {/* End Menu Button */}
+            </div>
 
-          {/*        <Menu.Item>*/}
-          {/*          <MenuItemStyle*/}
-          {/*            icon="faAlignLeft"*/}
-          {/*            onClick={() =>*/}
-          {/*              setModalNewNoteCardOpen(!modalNewNoteCardOpen)*/}
-          {/*            }*/}
-          {/*          >*/}
-          {/*            Note card*/}
-          {/*          </MenuItemStyle>*/}
-          {/*        </Menu.Item>*/}
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-white shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  {/* Menu Items */}
 
-          {/*        <Menu.Item>*/}
-          {/*          <MenuItemStyle*/}
-          {/*            icon="faCheckCircle"*/}
-          {/*            onClick={() =>*/}
-          {/*              setModalNewChecklistCardOpen(!modalNewChecklistCardOpen)*/}
-          {/*            }*/}
-          {/*          >*/}
-          {/*            Checklist card*/}
-          {/*          </MenuItemStyle>*/}
-          {/*        </Menu.Item>*/}
+                  <Menu.Item>
+                    <MenuItemStyle
+                      icon="faAlignLeft"
+                      onClick={() =>
+                        setModalNewNoteCardOpen(!modalNewNoteCardOpen)
+                      }
+                    >
+                      Note card
+                    </MenuItemStyle>
+                  </Menu.Item>
 
-          {/*        /!* End Menu Items *!/*/}
-          {/*      </div>*/}
-          {/*    </Menu.Items>*/}
-          {/*  </Transition>*/}
-          {/*</Menu>*/}
+                  <Menu.Item>
+                    <MenuItemStyle
+                      icon="faCheckCircle"
+                      onClick={() =>
+                        setModalNewChecklistCardOpen(!modalNewChecklistCardOpen)
+                      }
+                    >
+                      Checklist card
+                    </MenuItemStyle>
+                  </Menu.Item>
+
+                  {/* End Menu Items */}
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
           {/* End Add Button and Menu */}
         </div>
       )}
@@ -296,6 +294,7 @@ export default function List({
       />
 
       <ChecklistCardModal
+        parent_id={_id}
         openState={modalNewChecklistCardOpen}
         onClose={() => setModalNewChecklistCardOpen(!modalNewChecklistCardOpen)}
       />

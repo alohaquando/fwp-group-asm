@@ -5,6 +5,9 @@ import "./index.css";
 
 import { Data } from "./data/data";
 
+// Replace DATABASE_URL with your MongoDB Database URL
+// in the .env file
+
 // Run this project
 // // npm install
 // // npm start
